@@ -8,7 +8,7 @@
 #include "ReceptiveFields.h"
 
 
-ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels) : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels){
+ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels) : LOWER_LIMIT(lowerLimit), UPPER_LIMIT(upperLimit), NUMBER_OF_KERNELS(numberOfKernels){
 
 }
 
