@@ -35,7 +35,7 @@ void ReceptiveFields::createGaussianKernels(){
 }
 
 void ReceptiveFields::applyDeltaRule(){
-	transposeMatrix(gaussianKernels, transKernels);
+	transposeMatrix(*gaussianKernels, *transKernels);
 	for(int i = 0; i < learningRateIterations; i++){
 		for(int j = 0; j < numberOfKernels; j++){
 			for(int k = 0; k < targetSize; k++){
