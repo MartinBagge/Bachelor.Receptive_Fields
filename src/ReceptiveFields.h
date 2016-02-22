@@ -8,18 +8,39 @@
 #ifndef RECEPTIVEFIELDS_H_
 #define RECEPTIVEFIELDS_H_
 
+#include <cmath>
+
 class ReceptiveFields {
 
 	public:
-		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels);
+		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRate, const int targetSize);
 		virtual ~ReceptiveFields();
 	private:
 		const int lowerLimit;
 		const int upperLimit;
 		const int numberOfKernels;
+		const double kernelWidth;
+
+		double gaussianKernels[];
+		double kernelCenters[];
+		double weights[];
 
 		virtual void createGaussianKernels();
-		virtual void applyDeltaRule(int iterations);
+		virtual void linSpace(int start, int stop, int space, double *returnArray);
+		virtual void zeros(double *returnArray);
+
+		//Learning properties
+		double alfa[];
+		const double learningRate;
+		const int learningRateIterations;
+
+		virtual void applyDeltaRule();
+
+		//Learning target
+		const int targetSize;
+		double target[];
+
+		virtual void targetPattern(double *returnArray);
 };
 
 #endif /* RECEPTIVEFIELDS_H_ */
