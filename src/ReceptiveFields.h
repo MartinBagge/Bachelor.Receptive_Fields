@@ -21,13 +21,15 @@ class ReceptiveFields {
 		const int numberOfKernels;
 		const double kernelWidth;
 
-		double gaussianKernels[];
+		double gaussianKernels[][];
 		double kernelCenters[];
 		double weights[];
+		double transKernels[][];
 
 		virtual void createGaussianKernels();
 		virtual void linSpace(int start, int stop, int space, double *returnArray);
 		virtual void zeros(double *returnArray);
+		virtual void transposeMatrix(double *initialArray, double *returnArray);
 
 		//Learning properties
 		double alfa[];
