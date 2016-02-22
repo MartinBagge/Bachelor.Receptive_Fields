@@ -21,6 +21,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	linSpace(lowerLimit, upperLimit, targetSize, alfa);
 	zeros(initialWeights);
 
+
 }
 
 void ReceptiveFields::createGaussianKernels(){
