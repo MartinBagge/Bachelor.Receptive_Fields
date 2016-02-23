@@ -9,8 +9,8 @@
 
 
 
-ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double LearningRate, const int learningRateInterations, const int targetSize)
-: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningRateIterations(learningRateIterations), targetSize(targetSize){
+ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double LearningRate, const int learningInterations, const int targetSize)
+: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize){
 	gaussianKernels[numberOfKernels][targetSize];
 	kernelCenters[numberOfKernels];
 	alfa[targetSize];
@@ -20,13 +20,13 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	transWeights[1][numberOfKernels];
 	transOutput[targetSize][1];
 	output[1][targetSize];
-
+/*
 	genTargetPattern(targetPattern);
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa);
 	zeros(weights);
-
+*/
 }
 
 void ReceptiveFields::createGaussianKernels(){
@@ -97,7 +97,8 @@ void ReceptiveFields::toString(){
 	cout << lowerLimit << endl;
 	cout << "Upper Limit: ";
 	cout << upperLimit << endl;
-	/*
+	cout << sizeof(targetPattern);
+/*
 	cout << "\n Number of Kernels: " +numberOfKernels
 	cout << "\n Kernel Width: " +kernelWidth
 
@@ -112,5 +113,4 @@ void ReceptiveFields::toString(){
 */
 
 }
-
 

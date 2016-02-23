@@ -16,7 +16,7 @@ using namespace std;
 class ReceptiveFields {
 
 	public:
-		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRateIterations, const int targetSize);
+		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize);
 		virtual ~ReceptiveFields();
 		virtual void toString();
 	private:
@@ -42,7 +42,7 @@ class ReceptiveFields {
 		//Learning properties
 		double* alfa;
 		const double learningRate;
-		const int learningRateIterations;
+		const int learningIterations;
 
 		virtual void applyDeltaRule();
 

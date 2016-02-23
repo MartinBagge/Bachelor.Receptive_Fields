@@ -7,6 +7,6 @@ int main(){
 
 	ReceptiveFields* RF = new ReceptiveFields(45, 180, 20, 0.025, 0.2, 100, 1000);
 	RF->toString();
-	cout << endl;
+	cout << "lala";
 	return 0;
 }
