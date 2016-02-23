@@ -52,5 +52,4 @@ class ReceptiveFields {
 
 		virtual void genTargetPattern(double *returnArray);
 };
-
 #endif /* RECEPTIVEFIELDS_H_ */
