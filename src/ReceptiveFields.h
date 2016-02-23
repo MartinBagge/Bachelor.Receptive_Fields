@@ -9,35 +9,37 @@
 #define RECEPTIVEFIELDS_H_
 
 #include <cmath>
+#include <string>
+using namespace std;
 
 class ReceptiveFields {
 
 	public:
-		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRate, const int targetSize);
+		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRateIterations, const int targetSize);
 		virtual ~ReceptiveFields();
-		virtual std::string toString();
+		virtual string toString();
 	private:
 		const int lowerLimit;
 		const int upperLimit;
 		const int numberOfKernels;
 		const double kernelWidth;
 
-		double gaussianKernels[][];
-		double kernelCenters[];
-		double weights[][];
-		double transKernels[][];
-		double transWeights[][];
-		double transOutput[][];
-		double output[][];
-		double targetPattern[];
+		double** gaussianKernels;
+		double* kernelCenters;
+		double** weights;
+		double** transKernels;
+		double** transWeights;
+		double** transOutput;
+		double** output;
+		double* targetPattern;
 
 		virtual void createGaussianKernels();
 		virtual void linSpace(int start, int stop, int space, double *returnArray);
-		virtual void zeros(double *returnArray);
-		virtual void transposeMatrix(double *initialArray, double *returnArray);
+		virtual void zeros(double **returnArray);
+		virtual void transposeMatrix(double **initialArray, double **returnArray);
 
 		//Learning properties
-		double alfa[];
+		double* alfa;
 		const double learningRate;
 		const int learningRateIterations;
 
@@ -45,7 +47,7 @@ class ReceptiveFields {
 
 		//Learning target
 		const int targetSize;
-		double target[];
+		double* target;
 
 		virtual void genTargetPattern(double *returnArray);
 };

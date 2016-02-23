@@ -25,7 +25,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa);
-	zeros(initialWeights);
+	zeros(weights);
 
 }
 
@@ -38,24 +38,24 @@ void ReceptiveFields::createGaussianKernels(){
 }
 
 void ReceptiveFields::applyDeltaRule(){
-	transposeMatrix(*gaussianKernels, *transKernels);
+	transposeMatrix(gaussianKernels, transKernels);
 	for(int i = 0; i < learningRateIterations; i++){
-		transposeMatrix(*weights, *transWeights);
+		transposeMatrix(weights, transWeights);
 		for(int j = 0; j < numberOfKernels; j++){
 			for(int k = 0; k < targetSize; k++){
 				transOutput[k][1] = transKernels[j][k]*transWeights[1][j];
 			}
 		}
-		transposeMatrix(*transOutput, *output);
+		transposeMatrix(transOutput, output);
 		for(int l = 0; l < numberOfKernels; l++){
-			weights[l] = weights[l]+learningRate*(targetPattern[l]-output[l]);
+			weights[l][1] = weights[l][1]+learningRate*(targetPattern[l]-output[1][l]);
 		}
 
 	}
 
 }
 
-void ReceptiveFields::transposeMatrix(double *initialArray, double *returnArray){
+void ReceptiveFields::transposeMatrix(double **initialArray, double **returnArray){
 	for(int i = 0; i < numberOfKernels; i++){
 		for(int j = 0; j < targetSize; j++){
 			returnArray[j][i] = initialArray[i][j];
@@ -74,9 +74,9 @@ void ReceptiveFields::linSpace(int start, int stop, int space, double *returnArr
 	}
 }
 
-void ReceptiveFields::zeros(double *returnArray){
+void ReceptiveFields::zeros(double **returnArray){
 	for(int i = 0; i < sizeof(returnArray); i++){
-		returnArray[i] = 0;
+		returnArray[i][1] = 0;
 	}
 }
 
@@ -92,7 +92,7 @@ ReceptiveFields::~ReceptiveFields() {
 	// TODO Auto-generated destructor stub
 }
 
-std::string ReceptiveFields::toString(){
+string ReceptiveFields::toString(){
 	return 	"Lower Limit: " +lowerLimit
 			+ "\n Upper Limit: " + upperLimit
 			+ "\n Number of Kernels: " +numberOfKernels
