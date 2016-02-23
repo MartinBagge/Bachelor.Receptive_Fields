@@ -92,21 +92,25 @@ ReceptiveFields::~ReceptiveFields() {
 	// TODO Auto-generated destructor stub
 }
 
-string ReceptiveFields::toString(){
-	return 	"Lower Limit: " +lowerLimit
-			+ "\n Upper Limit: " + upperLimit
-			+ "\n Number of Kernels: " +numberOfKernels
-			+ "\n Kernel Width: " +kernelWidth
+void ReceptiveFields::toString(){
+	cout << "Lower Limit: ";
+	cout << lowerLimit << endl;
+	cout << "Upper Limit: ";
+	cout << upperLimit << endl;
+	/*
+	cout << "\n Number of Kernels: " +numberOfKernels
+	cout << "\n Kernel Width: " +kernelWidth
 
-			+ "\n Gaussian Kernels: " +gaussianKernels
-			+ "\n Kernel Centers: " +kernelCenters
-			+ "\n Weights: " +weights
-			+ "\n TransKernels: " +transKernels
-			+ "\n TransWeights: " +transWeights
-			+ "\n TransOutput: " +transOutput
-			+ "\n Output: " +output
-			+ "\n TargetPattern: " +targetPattern;
-
+	cout << "\n Gaussian Kernels: " +gaussianKernels
+	cout << "\n Kernel Centers: " +kernelCenters
+	cout << "\n Weights: " +weights
+	cout << "\n TransKernels: " +transKernels
+	cout << "\n TransWeights: " +transWeights
+	cout << "\n TransOutput: " +transOutput
+	cout << "\n Output: " +output
+	cout << "\n TargetPattern: " +targetPattern;
+*/
 
 }
+
 

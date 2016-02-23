@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <string>
+#include <iostream>
 using namespace std;
 
 class ReceptiveFields {
@@ -17,7 +18,7 @@ class ReceptiveFields {
 	public:
 		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRateIterations, const int targetSize);
 		virtual ~ReceptiveFields();
-		virtual string toString();
+		virtual void toString();
 	private:
 		const int lowerLimit;
 		const int upperLimit;
