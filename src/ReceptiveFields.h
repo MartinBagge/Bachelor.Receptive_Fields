@@ -23,8 +23,11 @@ class ReceptiveFields {
 
 		double gaussianKernels[][];
 		double kernelCenters[];
-		double weights[];
+		double weights[][];
 		double transKernels[][];
+		double transWeights[][];
+		double transOutput[][];
+		double output[][];
 
 		virtual void createGaussianKernels();
 		virtual void linSpace(int start, int stop, int space, double *returnArray);

@@ -14,9 +14,12 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	gaussianKernels[numberOfKernels][targetSize];
 	kernelCenters[numberOfKernels];
 	alfa[targetSize];
-	weights[numberOfKernels];
+	weights[numberOfKernels][1];
 	targetPattern[targetSize];
 	transKernels[targetSize][numberOfKernels];
+	transWeights[1][numberOfKernels];
+	transOutput[targetSize][1];
+	output[1][targetSize];
 
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters);
@@ -37,13 +40,16 @@ void ReceptiveFields::createGaussianKernels(){
 void ReceptiveFields::applyDeltaRule(){
 	transposeMatrix(*gaussianKernels, *transKernels);
 	for(int i = 0; i < learningRateIterations; i++){
+		transposeMatrix(*weights, *transWeights);
 		for(int j = 0; j < numberOfKernels; j++){
 			for(int k = 0; k < targetSize; k++){
-				gaussianKernels[j][k] = gaussianKernels[j][k]*weights[j];
+				transOutput[k][1] = transKernels[j][k]*transWeights[1][j];
 			}
 		}
+		transposeMatrix(*transWeights, *weights);
 		weights[i] = weights[i]+learningRate*(targetPattern[i]);
 	}
+	transposeMatrix(*transOutput, *output);
 }
 
 void ReceptiveFields::transposeMatrix(double *initialArray, double *returnArray){
