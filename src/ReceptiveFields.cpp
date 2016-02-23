@@ -97,19 +97,28 @@ void ReceptiveFields::toString(){
 	cout << lowerLimit << endl;
 	cout << "Upper Limit: ";
 	cout << upperLimit << endl;
-	/*
-	cout << "\n Number of Kernels: " +numberOfKernels
-	cout << "\n Kernel Width: " +kernelWidth
 
-	cout << "\n Gaussian Kernels: " +gaussianKernels
-	cout << "\n Kernel Centers: " +kernelCenters
-	cout << "\n Weights: " +weights
-	cout << "\n TransKernels: " +transKernels
-	cout << "\n TransWeights: " +transWeights
-	cout << "\n TransOutput: " +transOutput
-	cout << "\n Output: " +output
-	cout << "\n TargetPattern: " +targetPattern;
-*/
+	cout << "Number of Kernels: " +numberOfKernels
+	cout << "Kernel Width: " +kernelWidth
+
+	cout << "Gaussian Kernels: ";
+	cout << gaussianKernels  << endl;
+	cout << "Kernel Centers: ";
+	cout << kernelCenters << endl;
+	cout << "Weights: ";
+	cout << weights << endl;
+	cout << "TransKernels: ";
+	cout << transKernels << endl;
+	cout << "TransWeights: ";
+	cout << transWeights << endl;
+	cout << "TransOutput: ";
+	cout << transOutput << endl;
+	cout << "Output: ";
+	cout << output << endl;
+	cout << "TargetPattern: ";
+	cout << targetPattern << endl;
+
 
 }
+
 
