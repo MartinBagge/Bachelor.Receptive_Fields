@@ -98,8 +98,10 @@ void ReceptiveFields::toString(){
 	cout << "Upper Limit: ";
 	cout << upperLimit << endl;
 
-	cout << "Number of Kernels: " +numberOfKernels
-	cout << "Kernel Width: " +kernelWidth
+	cout << "Number of Kernels: ";
+	cout << numberOfKernels << endl;
+	cout << "Kernel Width: ";
+	cout << kernelWidth << endl;
 
 	cout << "Gaussian Kernels: ";
 	cout << gaussianKernels  << endl;
