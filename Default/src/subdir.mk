@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/ReceptiveFields.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/ReceptiveFields.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/ReceptiveFields.d \
 ./src/main.d 
 
 

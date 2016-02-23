@@ -21,11 +21,11 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	transOutput[targetSize][1];
 	output[1][targetSize];
 
+	genTargetPattern(targetPattern);
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa);
 	zeros(initialWeights);
-
 
 }
 
@@ -46,10 +46,13 @@ void ReceptiveFields::applyDeltaRule(){
 				transOutput[k][1] = transKernels[j][k]*transWeights[1][j];
 			}
 		}
-		transposeMatrix(*transWeights, *weights);
-		weights[i] = weights[i]+learningRate*(targetPattern[i]);
+		transposeMatrix(*transOutput, *output);
+		for(int l = 0; l < numberOfKernels; l++){
+			weights[l] = weights[l]+learningRate*(targetPattern[l]-output[l]);
+		}
+
 	}
-	transposeMatrix(*transOutput, *output);
+
 }
 
 void ReceptiveFields::transposeMatrix(double *initialArray, double *returnArray){
@@ -77,7 +80,7 @@ void ReceptiveFields::zeros(double *returnArray){
 	}
 }
 
-void ReceptiveFields::targetPattern(double *returnArray){
+void ReceptiveFields::genTargetPattern(double *returnArray){
 	int value = 0;
 	for(int i = 0; i < sizeof(returnArray); i++){
 		returnArray[i] = value*2*M_PI;
@@ -87,5 +90,23 @@ void ReceptiveFields::targetPattern(double *returnArray){
 
 ReceptiveFields::~ReceptiveFields() {
 	// TODO Auto-generated destructor stub
+}
+
+std::string ReceptiveFields::toString(){
+	return 	"Lower Limit: " +lowerLimit
+			+ "\n Upper Limit: " + upperLimit
+			+ "\n Number of Kernels: " +numberOfKernels
+			+ "\n Kernel Width: " +kernelWidth
+
+			+ "\n Gaussian Kernels: " +gaussianKernels
+			+ "\n Kernel Centers: " +kernelCenters
+			+ "\n Weights: " +weights
+			+ "\n TransKernels: " +transKernels
+			+ "\n TransWeights: " +transWeights
+			+ "\n TransOutput: " +transOutput
+			+ "\n Output: " +output
+			+ "\n TargetPattern: " +targetPattern;
+
+
 }
 

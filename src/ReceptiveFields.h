@@ -15,6 +15,7 @@ class ReceptiveFields {
 	public:
 		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningRate, const int targetSize);
 		virtual ~ReceptiveFields();
+		virtual std::string toString();
 	private:
 		const int lowerLimit;
 		const int upperLimit;
@@ -28,6 +29,7 @@ class ReceptiveFields {
 		double transWeights[][];
 		double transOutput[][];
 		double output[][];
+		double targetPattern[];
 
 		virtual void createGaussianKernels();
 		virtual void linSpace(int start, int stop, int space, double *returnArray);
@@ -45,7 +47,7 @@ class ReceptiveFields {
 		const int targetSize;
 		double target[];
 
-		virtual void targetPattern(double *returnArray);
+		virtual void genTargetPattern(double *returnArray);
 };
 
 #endif /* RECEPTIVEFIELDS_H_ */
