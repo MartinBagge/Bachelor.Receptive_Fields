@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS :=
+LIBS := -l/usr/lib/x86_64-linux-gnu
 

@@ -11,7 +11,8 @@
 #include <cmath>
 #include <string>
 #include <iostream>
-using namespace std;
+#include <vector>
+#include "boost/multi_array.hpp"
 
 class ReceptiveFields {
 
@@ -25,31 +26,40 @@ class ReceptiveFields {
 		const int numberOfKernels;
 		const double kernelWidth;
 
-		double** gaussianKernels;
-		double* kernelCenters;
-		double** weights;
-		double** transKernels;
-		double** transWeights;
-		double** transOutput;
-		double** output;
-		double* targetPattern;
+		typedef boost::multi_array<double, 2> twoDimArray;
+		typedef twoDimArray::index index;
+
+		typedef boost::multi_array<double, 1> oneDimArray;
+
+		twoDimArray gaussianKernels;
+		oneDimArray kernelCenters;
+		oneDimArray alfa;
+		twoDimArray weights;
+		oneDimArray targetPattern;
+		twoDimArray transKernels;
+		twoDimArray transWeights;
+		twoDimArray transOutput;
+		twoDimArray output;
+
+
 
 		virtual void createGaussianKernels();
-		virtual void linSpace(int start, int stop, int space, double *returnArray);
-		virtual void zeros(double **returnArray);
-		virtual void transposeMatrix(double **initialArray, double **returnArray);
+		virtual void linSpace(int start, int stop, int space, oneDimArray& returnArray);
+		virtual void zeros(twoDimArray& returnVector);
+		virtual void transposeMatrix(twoDimArray& initialArray, twoDimArray& returnArray);
 
 		//Learning properties
-		double* alfa;
+
+
 		const double learningRate;
 		const int learningIterations;
 
 		virtual void applyDeltaRule();
 
 		//Learning target
-		const int targetSize;
-		double* target;
 
-		virtual void genTargetPattern(double *returnArray);
+		const int targetSize;
+
+		virtual void genTargetPattern(oneDimArray& returnArray);
 };
 #endif /* RECEPTIVEFIELDS_H_ */

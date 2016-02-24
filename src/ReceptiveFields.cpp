@@ -9,24 +9,25 @@
 
 
 
-ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double LearningRate, const int learningInterations, const int targetSize)
+ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize)
 : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize){
-	gaussianKernels[numberOfKernels][targetSize];
-	kernelCenters[numberOfKernels];
-	alfa[targetSize];
-	weights[numberOfKernels][1];
-	targetPattern[targetSize];
-	transKernels[targetSize][numberOfKernels];
-	transWeights[1][numberOfKernels];
-	transOutput[targetSize][1];
-	output[1][targetSize];
-/*
+
+	gaussianKernels(boost::extents[numberOfKernels][targetSize]);
+	kernelCenters(boost::extents[numberOfKernels]);
+	alfa(boost::extents[targetSize]);
+	weights(boost::extents[numberOfKernels][1]);
+	targetPattern(boost::extents[targetSize]);
+	transKernels(boost::extents[targetSize][numberOfKernels]);
+	transWeights(boost::extents[1][numberOfKernels]);
+	transOutput(boost::extents[targetSize][1]);
+	output(boost::extents[1][targetSize]);
+
 	genTargetPattern(targetPattern);
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa);
 	zeros(weights);
-*/
+
 }
 
 void ReceptiveFields::createGaussianKernels(){
@@ -55,7 +56,7 @@ void ReceptiveFields::applyDeltaRule(){
 
 }
 
-void ReceptiveFields::transposeMatrix(double **initialArray, double **returnArray){
+void ReceptiveFields::transposeMatrix(twoDimArray& initialArray, twoDimArray& returnArray){
 	for(int i = 0; i < numberOfKernels; i++){
 		for(int j = 0; j < targetSize; j++){
 			returnArray[j][i] = initialArray[i][j];
@@ -63,10 +64,11 @@ void ReceptiveFields::transposeMatrix(double **initialArray, double **returnArra
 	}
 }
 
-void ReceptiveFields::linSpace(int start, int stop, int space, double *returnArray){
+void ReceptiveFields::linSpace(int start, int stop, int space, oneDimArray& returnArray){
 	double addValue = (stop-start)/space;
 	for(int i = 0; i < space; i++){
 		if(i == 0){
+			std::cout << "returnArray size: " << returnArray.dimensionality << std::endl;
 			returnArray[i] = start;
 		}else{
 			returnArray[i] = returnArray[i-1]+addValue;
@@ -74,15 +76,15 @@ void ReceptiveFields::linSpace(int start, int stop, int space, double *returnArr
 	}
 }
 
-void ReceptiveFields::zeros(double **returnArray){
-	for(int i = 0; i < sizeof(returnArray); i++){
+void ReceptiveFields::zeros(twoDimArray& returnArray){
+	for(int i = 0; i < returnArray.shape()[0]; i++){
 		returnArray[i][1] = 0;
 	}
 }
 
-void ReceptiveFields::genTargetPattern(double *returnArray){
+void ReceptiveFields::genTargetPattern(oneDimArray& returnArray){
 	int value = 0;
-	for(int i = 0; i < sizeof(returnArray); i++){
+	for(int i = 0; i < returnArray.shape()[0]; i++){
 		returnArray[i] = value*2*M_PI;
 		value += 1/targetSize;
 	}
@@ -93,33 +95,15 @@ ReceptiveFields::~ReceptiveFields() {
 }
 
 void ReceptiveFields::toString(){
-	cout << "Lower Limit: ";
-	cout << lowerLimit << endl;
-	cout << "Upper Limit: ";
-	cout << upperLimit << endl;
+	std::cout << "Lower Limit: ";
+	std::cout << lowerLimit << std::endl;
+	std::cout << "Upper Limit: ";
+	std::cout << upperLimit << std::endl;
 
-	cout << "Number of Kernels: ";
-	cout << numberOfKernels << endl;
-	cout << "Kernel Width: ";
-	cout << kernelWidth << endl;
-
-	cout << "Gaussian Kernels: ";
-	cout << gaussianKernels  << endl;
-	cout << "Kernel Centers: ";
-	cout << kernelCenters << endl;
-	cout << "Weights: ";
-	cout << weights << endl;
-	cout << "TransKernels: ";
-	cout << transKernels << endl;
-	cout << "TransWeights: ";
-	cout << transWeights << endl;
-	cout << "TransOutput: ";
-	cout << transOutput << endl;
-	cout << "Output: ";
-	cout << output << endl;
-	cout << "TargetPattern: ";
-	cout << targetPattern << endl;
-
+	std::cout << "Number of Kernels: ";
+	std::cout << numberOfKernels << std::endl;
+	std::cout << "Kernel Width: ";
+	std::cout << kernelWidth << std::endl;
 
 }
 
