@@ -12,7 +12,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "boost/multi_array.hpp"
+//#include "boost/multi_array.hpp"
 
 class ReceptiveFields {
 
@@ -25,7 +25,7 @@ class ReceptiveFields {
 		const int upperLimit;
 		const int numberOfKernels;
 		const double kernelWidth;
-
+/*
 		typedef boost::multi_array<double, 2> twoDimArray;
 		typedef twoDimArray::index index;
 
@@ -40,13 +40,23 @@ class ReceptiveFields {
 		twoDimArray transWeights;
 		twoDimArray transOutput;
 		twoDimArray output;
+*/
 
+		std::vector<double> gaussianKernels2d;
+		std::vector<double> kernelCenters1d;
+		std::vector<double> alfa1d;
+		std::vector<double> weights1d;
+		std::vector<double> targetPattern1d;
+		std::vector<double> transKernels2d;
+		//std::vector<double> transWeights1d;
+		//std::vector<double> transOutput1d;
+		std::vector<double> output1d;
 
 
 		virtual void createGaussianKernels();
-		virtual void linSpace(int start, int stop, int space, oneDimArray& returnArray);
-		virtual void zeros(twoDimArray& returnVector);
-		virtual void transposeMatrix(twoDimArray& initialArray, twoDimArray& returnArray);
+		virtual void linSpace(int start, int stop, int space, std::vector<double> returnArray);
+		virtual void zeros(std::vector<double> returnVector);
+		virtual void transposeMatrix(std::vector<double> initialArray, std::vector<double> returnArray, int numberOfDims);
 
 		//Learning properties
 
@@ -60,6 +70,6 @@ class ReceptiveFields {
 
 		const int targetSize;
 
-		virtual void genTargetPattern(oneDimArray& returnArray);
+		virtual void genTargetPattern(std::vector<double> returnArray);
 };
 #endif /* RECEPTIVEFIELDS_H_ */
