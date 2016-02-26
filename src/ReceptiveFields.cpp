@@ -24,8 +24,8 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	transOutput(boost::extents[targetSize][1]);
 	output(boost::extents[1][targetSize]);
 */
-	gaussianKernels2d[0] = numberOfKernels;
-	transKernels2d[0] = targetSize;
+	gaussianKernels2d[0] = targetSize;
+	transKernels2d[0] = numberOfKernels;
 
 	genTargetPattern(targetPattern1d);
 
@@ -48,11 +48,16 @@ void ReceptiveFields::createGaussianKernels(){
 void ReceptiveFields::applyDeltaRule(){
 	transposeMatrix(gaussianKernels2d, transKernels2d, 2);
 	int rowAdd;
+	double value;
 	for(int i = 0; i < learningIterations; i++){
-		for(int j = 0; j < numberOfKernels; j++){
-			for(int k = 0; k < targetSize; k++){
-				output1d[k] = transKernels2d[j*k]*weights1d[j];
+		for(int j = 0; j < targetSize; j++){
+			value = 0;
+			rowAdd = j*transKernels2d[0]+1;
+			for(int k = 0; k < numberOfKernels; k++){
+				//no need for transKernels we can optimize and just use Kernels instead
+				value += transKernels2d[k+rowAdd]*weights1d[k];
 			}
+			output1d[j]=value;
 		}
 		for(int l = 0; l < numberOfKernels; l++){
 			weights1d[l] = weights1d[l]+learningRate*(targetPattern1d[l]-output1d[l]);
@@ -67,9 +72,9 @@ void ReceptiveFields::transposeMatrix(std::vector<double> initialArray, std::vec
 	case 2:
 		int rowAdd;
 			for(int i = 0; i < initialArray[0]; i++){
-				rowAdd = i*returnArray[0];
+				rowAdd = i*returnArray[0]+1;
 				for(int j = 0; j < returnArray[0]; j++){
-					returnArray[1+j+rowAdd] = initialArray[1+i+j*initialArray[0]];
+					returnArray[j+rowAdd] = initialArray[1+i+j*initialArray[0]];
 				}
 			}
 		break;
@@ -92,7 +97,7 @@ void ReceptiveFields::linSpace(int start, int stop, int space, std::vector<doubl
 
 void ReceptiveFields::zeros(std::vector<double> returnArray){
 	for(int i = 0; i < returnArray.size(); i++){
-		returnArray[i][1] = 0;
+		returnArray[i] = 0;
 	}
 }
 
