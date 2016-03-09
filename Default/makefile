@@ -39,19 +39,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Receptive_Fields
+all: Bachelor.Receptive_Fields
 
 # Tool invocations
-Receptive_Fields: $(OBJS) $(USER_OBJS)
+Bachelor.Receptive_Fields: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/usr/lib/x86_64-linux-gnu -L/usr/include/boost -L/home/martin/boost/boost_1_60_0 -o "Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Invoking: Cygwin C++ Linker'
+	g++ -L/usr/lib/x86_64-linux-gnu -L/usr/include/boost -L/home/martin/boost/boost_1_60_0 -o "Bachelor.Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) Receptive_Fields
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) Bachelor.Receptive_Fields
 	-@echo ' '
 
 .PHONY: all clean dependents
