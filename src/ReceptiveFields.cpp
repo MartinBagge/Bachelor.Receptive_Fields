@@ -56,7 +56,7 @@ void ReceptiveFields::applyDeltaRule(){
 
 }
 
-void ReceptiveFields::transposeMatrix(twoDimArray& initialArray, twoDimArray& returnArray){
+void ReceptiveFields::transposeMatrix(twoDimArray initialArray, twoDimArray returnArray){
 	for(int i = 0; i < numberOfKernels; i++){
 		for(int j = 0; j < targetSize; j++){
 			returnArray[j][i] = initialArray[i][j];
@@ -64,7 +64,7 @@ void ReceptiveFields::transposeMatrix(twoDimArray& initialArray, twoDimArray& re
 	}
 }
 
-void ReceptiveFields::linSpace(int start, int stop, int space, oneDimArray& returnArray){
+void ReceptiveFields::linSpace(int start, int stop, int space, oneDimArray returnArray){
 	double addValue = (stop-start)/space;
 	for(int i = 0; i < space; i++){
 		if(i == 0){
@@ -76,13 +76,13 @@ void ReceptiveFields::linSpace(int start, int stop, int space, oneDimArray& retu
 	}
 }
 
-void ReceptiveFields::zeros(twoDimArray& returnArray){
+void ReceptiveFields::zeros(twoDimArray returnArray){
 	for(int i = 0; i < returnArray.shape()[0]; i++){
 		returnArray[i][1] = 0;
 	}
 }
 
-void ReceptiveFields::genTargetPattern(oneDimArray& returnArray){
+void ReceptiveFields::genTargetPattern(oneDimArray returnArray){
 	int value = 0;
 	for(int i = 0; i < returnArray.shape()[0]; i++){
 		returnArray[i] = value*2*M_PI;

@@ -44,9 +44,9 @@ class ReceptiveFields {
 
 
 		virtual void createGaussianKernels();
-		virtual void linSpace(int start, int stop, int space, oneDimArray& returnArray);
-		virtual void zeros(twoDimArray& returnVector);
-		virtual void transposeMatrix(twoDimArray& initialArray, twoDimArray& returnArray);
+		virtual void linSpace(int start, int stop, int space, oneDimArray returnArray);
+		virtual void zeros(twoDimArray returnVector);
+		virtual void transposeMatrix(twoDimArray initialArray, twoDimArray returnArray);
 
 		//Learning properties
 
@@ -60,6 +60,6 @@ class ReceptiveFields {
 
 		const int targetSize;
 
-		virtual void genTargetPattern(oneDimArray& returnArray);
+		virtual void genTargetPattern(oneDimArray returnArray);
 };
 #endif /* RECEPTIVEFIELDS_H_ */
