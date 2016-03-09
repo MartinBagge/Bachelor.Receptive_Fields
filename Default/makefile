@@ -45,7 +45,7 @@ all: Bachelor.Receptive_Fields
 Bachelor.Receptive_Fields: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cygwin C++ Linker'
-	g++ -L/usr/lib/x86_64-linux-gnu -L/usr/include/boost -L/home/martin/boost/boost_1_60_0 -o "Bachelor.Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -o "Bachelor.Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
