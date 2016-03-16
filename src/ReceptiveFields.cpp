@@ -10,28 +10,15 @@
 
 
 ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize)
-: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
-  gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize), weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1),
-  /*transWeights1d(numberOfKernels), transOutput1d(targetSize), */output1d(targetSize){
-/*
-	gaussianKernels(boost::extents[numberOfKernels][targetSize]);
-	kernelCenters(boost::extents[numberOfKernels]);
-	alfa(boost::extents[targetSize]);
-	weights(boost::extents[numberOfKernels][1]);
-	targetPattern(boost::extents[targetSize]);
-	transKernels(boost::extents[targetSize][numberOfKernels]);
-	transWeights(boost::extents[1][numberOfKernels]);
-	transOutput(boost::extents[targetSize][1]);
-	output(boost::extents[1][targetSize]);
-*/
+: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize), gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize), weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
+
 	gaussianKernels2d[0] = targetSize;
 	transKernels2d[0] = numberOfKernels;
-
-	genTargetPattern(targetPattern1d);
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters1d);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
 	zeros(weights1d);
+	createGaussianKernels();
 
 }
 
@@ -101,10 +88,11 @@ void ReceptiveFields::zeros(std::vector<double> returnArray){
 	}
 }
 
-void ReceptiveFields::genTargetPattern(std::vector<double> returnArray){
+void ReceptiveFields::genTargetPattern(double (func)(int)){
 	int value = 0;
-	for(int i = 0; i < returnArray.size(); i++){
-		returnArray[i] = value*2*M_PI;
+	for(int i = 0; i < targetPattern1d.size(); i++){
+		double d = func(i);
+		targetPattern1d[i] = value*d;
 		value += 1/targetSize;
 	}
 }
@@ -125,4 +113,3 @@ void ReceptiveFields::toString(){
 	std::cout << kernelWidth << std::endl;
 
 }
-

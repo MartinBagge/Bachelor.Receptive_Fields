@@ -18,8 +18,11 @@ class ReceptiveFields {
 
 	public:
 		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize);
-		virtual ~ReceptiveFields();
+
+		~ReceptiveFields();
+
 		virtual void toString();
+		virtual void genTargetPattern(double (*func)(int));
 	private:
 		const int lowerLimit;
 		const int upperLimit;
@@ -70,6 +73,5 @@ class ReceptiveFields {
 
 		const int targetSize;
 
-		virtual void genTargetPattern(std::vector<double> returnArray);
 };
 #endif /* RECEPTIVEFIELDS_H_ */
