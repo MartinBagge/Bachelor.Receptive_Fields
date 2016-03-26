@@ -24,10 +24,10 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 
 void ReceptiveFields::createGaussianKernels(){
 	int rowAdd;
-	for(int i = 0; i < targetSize; i++){
+	for(int i = 0; i < numberOfKernels; i++){
 		rowAdd = i*gaussianKernels2d[0]+1;
 		for(int j = 0; j < gaussianKernels2d[0]; j++){
-			gaussianKernels2d[j+rowAdd] = exp(pow(-(double)(alfa1d[i]-kernelCenters1d[j]),2.0)/2*kernelWidth);
+			gaussianKernels2d[j+rowAdd] = exp(pow(-(double)(alfa1d[j]-kernelCenters1d[i]),2.0)/2*kernelWidth);
 		}
 	}
 }
