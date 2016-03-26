@@ -70,7 +70,7 @@ void ReceptiveFields::transposeMatrix(std::vector<double> initialArray, std::vec
 	}
 
 }
-
+//might not be needed as inputs are preffered
 void ReceptiveFields::linSpace(int start, int stop, int space, std::vector<double> returnArray){
 	double addValue = (stop-start)/space;
 	for(int i = 0; i < space; i++){

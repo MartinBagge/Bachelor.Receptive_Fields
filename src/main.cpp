@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <sstream>
+#include <fstream>
 #include "ReceptiveFields.h"
 using namespace std;
 
@@ -16,19 +16,22 @@ int main(){
 	ifstream filein;
 	filein.open("filename.extension");
 	int index = 0;
-	while(!filein.eof){
-		getline(filein,inputStrings[int];
+	while(!filein.eof()){
+		getline(filein,inputStrings[index]);
 		index++;
 	}
-	stringstream ss();
 	vector<string> splitStrings;
-	string buff;
-	for(int i = 0; i < inputString.size(); i++){
-		ss(inputStrings[i]);
-		while( ss >> buff){
-			splitString.push_back(buff);
+	string delimiter = " ";
+	string token;
+	size_t pos = 0;
+	for(int i = 0; i < inputStrings.size(); i++){
+		while((pos = inputStrings[i].find(delimiter)) != std::string::npos){
+			token = inputStrings[i].substr(0,pos);
+			splitStrings.push_back(token);
+			inputStrings[i].erase(0, pos + delimiter.length());	
 		}
-		//call to Receptive Fields activation function
+		//call receptive fields
 	}
+	filein.close();
 	return 0;
 }
