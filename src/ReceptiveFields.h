@@ -23,7 +23,10 @@ class ReceptiveFields {
 
 		virtual void toString();
 		virtual void genTargetPattern(double (*func)(int));
+		virtual void generateAlfa(double input);
+		virtual void createGaussianKernels();
 	private:
+		int alfacount;
 		const int lowerLimit;
 		const int upperLimit;
 		const int numberOfKernels;
@@ -56,7 +59,7 @@ class ReceptiveFields {
 		std::vector<double> output1d;
 
 
-		virtual void createGaussianKernels();
+
 		virtual void linSpace(int start, int stop, int space, std::vector<double> returnArray);
 		virtual void zeros(std::vector<double> returnVector);
 		virtual void transposeMatrix(std::vector<double> initialArray, std::vector<double> returnArray, int numberOfDims);

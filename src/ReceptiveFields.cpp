@@ -9,8 +9,12 @@
 
 
 
-ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize)
-: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth), learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize), gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize), weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
+ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels,
+		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize)
+: lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth),
+  learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
+  gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
+  weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
 
 	gaussianKernels2d[0] = targetSize;
 	transKernels2d[0] = numberOfKernels;
@@ -18,7 +22,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters1d);
 	linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
 	zeros(weights1d);
-	createGaussianKernels();
+	alfacount = 0;
 
 }
 
@@ -32,6 +36,23 @@ void ReceptiveFields::createGaussianKernels(){
 	}
 }
 
+void ReceptiveFields::zeros(std::vector<double> returnArray){
+	for(int i = 0; i < returnArray.size(); i++){
+		returnArray[i] = 0;
+	}
+}
+
+ReceptiveFields::~ReceptiveFields() {
+	// TODO Auto-generated destructor stub
+}
+
+
+//LEARNING
+void ReceptiveFields::generateAlfa(double input){
+	alfa1d[alfacount]=input;
+	alfacount++;
+}
+
 void ReceptiveFields::applyDeltaRule(){
 	transposeMatrix(gaussianKernels2d, transKernels2d, 2);
 	int rowAdd;
@@ -41,7 +62,7 @@ void ReceptiveFields::applyDeltaRule(){
 			value = 0;
 			rowAdd = j*transKernels2d[0]+1;
 			for(int k = 0; k < numberOfKernels; k++){
-				//no need for transKernels we can optimize and just use Kernels instead
+				//no need for transKernels we can optimize and just use original Kernels instead
 				value += transKernels2d[k+rowAdd]*weights1d[k];
 			}
 			output1d[j]=value;
@@ -82,23 +103,13 @@ void ReceptiveFields::linSpace(int start, int stop, int space, std::vector<doubl
 	}
 }
 
-void ReceptiveFields::zeros(std::vector<double> returnArray){
-	for(int i = 0; i < returnArray.size(); i++){
-		returnArray[i] = 0;
-	}
-}
 
+//prob not needed
 void ReceptiveFields::genTargetPattern(double (func)(int)){
-	int value = 0;
 	for(int i = 0; i < targetPattern1d.size(); i++){
 		double d = func(i);
-		targetPattern1d[i] = value*d;
-		value += 1/targetSize;
+		targetPattern1d[i] = d;
 	}
-}
-
-ReceptiveFields::~ReceptiveFields() {
-	// TODO Auto-generated destructor stub
 }
 
 void ReceptiveFields::toString(){

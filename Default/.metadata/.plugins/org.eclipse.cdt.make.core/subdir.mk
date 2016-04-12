@@ -12,10 +12,10 @@ C_SRCS += \
 OBJS += \
 ./.metadata/.plugins/org.eclipse.cdt.make.core/specs.o 
 
-CPP_DEPS += \
+C_DEPS += \
 ./.metadata/.plugins/org.eclipse.cdt.make.core/specs.d 
 
-C_DEPS += \
+CPP_DEPS += \
 ./.metadata/.plugins/org.eclipse.cdt.make.core/specs.d 
 
 
