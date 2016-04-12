@@ -23,10 +23,11 @@ class ReceptiveFields {
 
 		virtual void toString();
 		virtual void genTargetPattern(double (*func)(int));
-		virtual void generateAlfa(double input);
+		virtual void generateTarget(double input);
 		virtual void createGaussianKernels();
+		virtual void generateAlfaPattern();
 	private:
-		int alfacount;
+		int targetcount;
 		const int lowerLimit;
 		const int upperLimit;
 		const int numberOfKernels;

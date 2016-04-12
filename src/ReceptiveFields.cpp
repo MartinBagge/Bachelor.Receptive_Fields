@@ -20,9 +20,9 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	transKernels2d[0] = numberOfKernels;
 
 	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters1d);
-	linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
+	//linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
 	zeros(weights1d);
-	alfacount = 0;
+	targetcount = 0;
 
 }
 
@@ -31,9 +31,10 @@ void ReceptiveFields::createGaussianKernels(){
 	for(int i = 0; i < numberOfKernels; i++){
 		rowAdd = i*gaussianKernels2d[0]+1;
 		for(int j = 0; j < gaussianKernels2d[0]; j++){
-			gaussianKernels2d[j+rowAdd] = exp(pow(-(double)(alfa1d[j]-kernelCenters1d[i]),2.0)/2*kernelWidth);
+			gaussianKernels2d[j+rowAdd] = exp(pow(-((double)(alfa1d[j]-kernelCenters1d[i])),2)/2*kernelWidth);
 		}
 	}
+	applyDeltaRule();
 }
 
 void ReceptiveFields::zeros(std::vector<double> returnArray){
@@ -48,9 +49,15 @@ ReceptiveFields::~ReceptiveFields() {
 
 
 //LEARNING
-void ReceptiveFields::generateAlfa(double input){
-	alfa1d[alfacount]=input;
-	alfacount++;
+void ReceptiveFields::generateTarget(double input){
+	targetPattern1d[targetcount]=input;
+	targetcount++;
+}
+
+void ReceptiveFields::generateAlfaPattern(){
+	for(int i = 0; i<targetSize; i++){
+		alfa1d[i]=i+1;
+	}
 }
 
 void ReceptiveFields::applyDeltaRule(){
@@ -63,14 +70,16 @@ void ReceptiveFields::applyDeltaRule(){
 			rowAdd = j*transKernels2d[0]+1;
 			for(int k = 0; k < numberOfKernels; k++){
 				//no need for transKernels we can optimize and just use original Kernels instead
-				value += transKernels2d[k+rowAdd]*weights1d[k];
-			}
-			output1d[j]=value;
-		}
-		for(int l = 0; l < numberOfKernels; l++){
-			weights1d[l] = weights1d[l]+learningRate*(targetPattern1d[l]-output1d[l]);
-		}
+				std::cout << gaussianKernels2d[k+rowAdd] << std::endl;
 
+				//std::cout << weights1d[k] << std::endl;
+				value += transKernels2d[k+rowAdd]*weights1d[k];
+				output1d[j]=value;
+				for(int l = 0; l < numberOfKernels; l++){
+					weights1d[l] = weights1d[l]+learningRate*(targetPattern1d[l]-alfa1d[l]);
+				}
+			}
+		}
 	}
 
 }
@@ -113,6 +122,11 @@ void ReceptiveFields::genTargetPattern(double (func)(int)){
 }
 
 void ReceptiveFields::toString(){
+
+	for(int i = 0; i < output1d.size(); i++){
+		std::cout << output1d[i] << std::endl;
+	}
+	/*
 	std::cout << "Lower Limit: ";
 	std::cout << lowerLimit << std::endl;
 	std::cout << "Upper Limit: ";
@@ -122,5 +136,6 @@ void ReceptiveFields::toString(){
 	std::cout << numberOfKernels << std::endl;
 	std::cout << "Kernel Width: ";
 	std::cout << kernelWidth << std::endl;
+	*/
 
 }
