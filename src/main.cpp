@@ -3,7 +3,14 @@
 #include <vector>
 #include <fstream>
 #include "ReceptiveFields.h"
+#include <gtest/gtest.h>
+
 using namespace std;
+
+TEST(Re){
+
+}
+
 
 int main(){
 	cout << "Test" << endl;
