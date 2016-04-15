@@ -18,10 +18,8 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 
 	gaussianKernels2d[0] = targetSize;
 	transKernels2d[0] = numberOfKernels;
-
-	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters1d);
-	//linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
-	zeros(weights1d);
+	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
+	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 
 }
@@ -32,15 +30,18 @@ void ReceptiveFields::createGaussianKernels(){
 		rowAdd = i*gaussianKernels2d[0]+1;
 		for(int j = 0; j < gaussianKernels2d[0]; j++){
 			gaussianKernels2d[j+rowAdd] = exp(pow(-((double)(alfa1d[j]-kernelCenters1d[i])),2)/2*kernelWidth);
+			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 		}
 	}
 	applyDeltaRule();
 }
 
-void ReceptiveFields::zeros(std::vector<double> returnArray){
-	for(int i = 0; i < returnArray.size(); i++){
-		returnArray[i] = 0;
+std::vector<double> ReceptiveFields::zeros(int size){
+	std::vector<double> returnVector(size);
+	for(int i = 0; i < size; i++){
+		returnVector[i] = 0;
 	}
+	return returnVector;
 }
 
 ReceptiveFields::~ReceptiveFields() {
@@ -61,7 +62,15 @@ void ReceptiveFields::generateAlfaPattern(){
 }
 
 void ReceptiveFields::applyDeltaRule(){
-	transposeMatrix(gaussianKernels2d, transKernels2d, 2);
+	/*for(int i=0; i < gaussianKernels2d.size(); i++){
+			std::cout << "gaussianKernels2d" << std::endl;
+			std::cout << gaussianKernels2d[i] << std::endl;
+		}*/
+	transKernels2d = transposeMatrix(gaussianKernels2d, gaussianKernels2d.size(), 2);
+	for(int i=0; i < transKernels2d.size(); i++){
+				std::cout << "transKernels2d" << std::endl;
+				std::cout << transKernels2d[i] << std::endl;
+			}
 	int rowAdd;
 	double value;
 	for(int i = 0; i < learningIterations; i++){
@@ -70,7 +79,7 @@ void ReceptiveFields::applyDeltaRule(){
 			rowAdd = j*transKernels2d[0]+1;
 			for(int k = 0; k < numberOfKernels; k++){
 				//no need for transKernels we can optimize and just use original Kernels instead
-				std::cout << gaussianKernels2d[k+rowAdd] << std::endl;
+				//std::cout << gaussianKernels2d[k+rowAdd] << std::endl;
 
 				//std::cout << weights1d[k] << std::endl;
 				value += transKernels2d[k+rowAdd]*weights1d[k];
@@ -84,32 +93,38 @@ void ReceptiveFields::applyDeltaRule(){
 
 }
 
-void ReceptiveFields::transposeMatrix(std::vector<double> initialArray, std::vector<double> returnArray, int numberOfDims){
+std::vector<double> ReceptiveFields::transposeMatrix(std::vector<double> initialArray, int size, int numberOfDims){
+	std::vector<double> returnVector(size);
 	switch(numberOfDims){
 	case 2:
+		returnVector[0]=initialArray[0];
 		int rowAdd;
-			for(int i = 0; i < initialArray[0]; i++){
-				rowAdd = i*returnArray[0]+1;
-				for(int j = 0; j < returnArray[0]; j++){
-					returnArray[j+rowAdd] = initialArray[1+i+j*initialArray[0]];
-				}
+		for(int i = 0; i < initialArray[0]; i++){
+			rowAdd = i*returnVector[0]+1;
+			for(int j = 0; j < returnVector[0]; j++){
+				returnVector[j+rowAdd] = initialArray[1+i+j*initialArray[0]];
 			}
-		break;
+		}
+		return returnVector;
 	default:
 		std::cout << "Dimension not supported" << std::endl;
 	}
 
 }
 //might not be needed as inputs are preffered
-void ReceptiveFields::linSpace(int start, int stop, int space, std::vector<double> returnArray){
+std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
 	double addValue = (stop-start)/space;
+	std::cout << addValue << std::endl;
+	std::vector<double> returnVector(space);
 	for(int i = 0; i < space; i++){
 		if(i == 0){
-			returnArray[i] = start;
+			returnVector[i] = start;
 		}else{
-			returnArray[i] = returnArray[i-1]+addValue;
+			returnVector[i] = returnVector[(i-1)]+addValue;
+			//std::cout << returnVector[i] << std::endl;
 		}
 	}
+	return returnVector;
 }
 
 
