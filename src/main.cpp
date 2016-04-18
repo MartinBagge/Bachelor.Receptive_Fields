@@ -16,7 +16,7 @@ TEST(Re){
 int main(){
 	cout << "Test" << endl;
 
-	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 0.2, 0.2, 1000, 266);
+	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 1, 0.1, 1000, 1061);
 	//Read data file
 	string inputString;
 	string token;
@@ -30,9 +30,9 @@ int main(){
 			splitStrings.push_back(token);
 		}
 		RF->generateTarget(atof(splitStrings[5].c_str()));
-		RF->generateAlfaPattern();
 	}
 	filein.close();
+	RF->generateAlfaPattern();
 	RF->createGaussianKernels();
 	RF->toString();
 	return 0;

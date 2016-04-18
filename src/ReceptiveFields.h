@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <fstream>
 //#include "boost/multi_array.hpp"
 
 class ReceptiveFields {
