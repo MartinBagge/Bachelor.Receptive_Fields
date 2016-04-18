@@ -15,32 +15,33 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
   weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
-
+	std::cout << "ReceptiveFields" << std::endl;
 	gaussianKernels2d[0] = targetSize;
-	transKernels2d[0] = numberOfKernels;
-
-	linSpace(lowerLimit, upperLimit, numberOfKernels, kernelCenters1d);
-	//linSpace(lowerLimit, upperLimit, targetSize, alfa1d);
-	zeros(weights1d);
+	kernelCenters1d = linSpaceDouble(1, targetSize, numberOfKernels);
+	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 
 }
 
 void ReceptiveFields::createGaussianKernels(){
 	int rowAdd;
+	std::cout << "gaussian" << std::endl;
 	for(int i = 0; i < numberOfKernels; i++){
 		rowAdd = i*gaussianKernels2d[0]+1;
 		for(int j = 0; j < gaussianKernels2d[0]; j++){
-			gaussianKernels2d[j+rowAdd] = exp(pow(-((double)(alfa1d[j]-kernelCenters1d[i])),2)/2*kernelWidth);
+			gaussianKernels2d[j+rowAdd] = exp(-pow(((double)(alfa1d[j]-kernelCenters1d[i])),2)/(2*kernelWidth));
+			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 		}
 	}
 	applyDeltaRule();
 }
 
-void ReceptiveFields::zeros(std::vector<double> returnArray){
-	for(int i = 0; i < returnArray.size(); i++){
-		returnArray[i] = 0;
+std::vector<double> ReceptiveFields::zeros(int size){
+	std::vector<double> returnVector(size);
+	for(int i = 0; i < size; i++){
+		returnVector[i] = 0;
 	}
+	return returnVector;
 }
 
 ReceptiveFields::~ReceptiveFields() {
@@ -61,55 +62,62 @@ void ReceptiveFields::generateAlfaPattern(){
 }
 
 void ReceptiveFields::applyDeltaRule(){
-	transposeMatrix(gaussianKernels2d, transKernels2d, 2);
-	int rowAdd;
 	double value;
-	for(int i = 0; i < learningIterations; i++){
-		for(int j = 0; j < targetSize; j++){
+	std::cout << "delta rule" << std::endl;
+	std::vector<int> space = linSpaceInt(1, targetSize, numberOfKernels);
+	for(int i = 0; i < numberOfKernels; i++){
+		std::cout << space[i] << std::endl;
+	}
+	for(int k = 0; k < learningIterations; k++){
+		for(int i = 0; i < targetSize; i++){
 			value = 0;
-			rowAdd = j*transKernels2d[0]+1;
-			for(int k = 0; k < numberOfKernels; k++){
-				//no need for transKernels we can optimize and just use original Kernels instead
-				std::cout << gaussianKernels2d[k+rowAdd] << std::endl;
+			for(int j = 0; j < numberOfKernels; j++){
+				value += gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j];
+			}
+			if(k==500){
 
-				//std::cout << weights1d[k] << std::endl;
-				value += transKernels2d[k+rowAdd]*weights1d[k];
-				output1d[j]=value;
-				for(int l = 0; l < numberOfKernels; l++){
-					weights1d[l] = weights1d[l]+learningRate*(targetPattern1d[l]-alfa1d[l]);
-				}
+				//std::cout << gaussianKernels2d[10*gaussianKernels2d[0]+1+i] << std::endl;
+			}
+
+			output1d[i]=value;
+		}
+		for(int l = 0; l < numberOfKernels; l++){
+			weights1d[l] += learningRate*(targetPattern1d[space[l]]-output1d[space[l]]);
+			if(k == 500){
+				//std::cout << weights1d[l] << "," << targetPattern1d[l] << "," << alfa1d[l] << std::endl;
 			}
 		}
 	}
 
 }
 
-void ReceptiveFields::transposeMatrix(std::vector<double> initialArray, std::vector<double> returnArray, int numberOfDims){
-	switch(numberOfDims){
-	case 2:
-		int rowAdd;
-			for(int i = 0; i < initialArray[0]; i++){
-				rowAdd = i*returnArray[0]+1;
-				for(int j = 0; j < returnArray[0]; j++){
-					returnArray[j+rowAdd] = initialArray[1+i+j*initialArray[0]];
-				}
-			}
-		break;
-	default:
-		std::cout << "Dimension not supported" << std::endl;
-	}
-
-}
 //might not be needed as inputs are preffered
-void ReceptiveFields::linSpace(int start, int stop, int space, std::vector<double> returnArray){
+std::vector<double> ReceptiveFields::linSpaceDouble(int start, int stop, int space){
 	double addValue = (stop-start)/space;
+	std::cout << addValue << std::endl;
+	std::vector<double> returnVector(space);
 	for(int i = 0; i < space; i++){
 		if(i == 0){
-			returnArray[i] = start;
+			returnVector[i] = start;
 		}else{
-			returnArray[i] = returnArray[i-1]+addValue;
+			returnVector[i] = returnVector[(i-1)]+addValue;
+			//std::cout << returnVector[i] << std::endl;
 		}
 	}
+	return returnVector;
+}
+
+std::vector<int> ReceptiveFields::linSpaceInt(int start, int stop, int space){
+	double addValue = (stop-start)/space;
+	std::cout << addValue << std::endl;
+	std::vector<int> returnVector(space);
+	double tmp = start;
+	for(int i = 0; i < space; i++){
+		tmp +=addValue;
+		returnVector[i] = round(tmp);
+		//std::cout << returnVector[i] << std::endl;
+	}
+	return returnVector;
 }
 
 
@@ -122,9 +130,16 @@ void ReceptiveFields::genTargetPattern(double (func)(int)){
 }
 
 void ReceptiveFields::toString(){
+	std::cout << "weights" << std::endl;
+	for (int i = 0; i < numberOfKernels; i++){
+		//std::cout << weights1d[i] << std::endl;
+	}
 
-	for(int i = 0; i < output1d.size(); i++){
-		std::cout << output1d[i] << std::endl;
+	std::cout << "output" << std::endl;
+	for(int i = 0; i < targetSize; i++){
+		//std::cout << i << "," << output1d[i] << "," << targetPattern1d[i] << std::endl;
+		//std::cout << gaussianKernels2d[i+1+100*gaussianKernels2d[0]] << std::endl;
+		//std::cout << alfa1d[i] << std::endl;
 	}
 	/*
 	std::cout << "Lower Limit: ";

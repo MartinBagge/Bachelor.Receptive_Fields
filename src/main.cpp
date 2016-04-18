@@ -16,7 +16,7 @@ TEST(Re){
 int main(){
 	cout << "Test" << endl;
 
-	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 0.025, 0.2, 1000, 266);
+	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 0.2, 0.2, 1000, 266);
 	//Read data file
 	string inputString;
 	string token;
@@ -29,7 +29,7 @@ int main(){
 		while(getline(lineStream, token, ',')){
 			splitStrings.push_back(token);
 		}
-		RF->generateTarget(atof(splitStrings[8].c_str()));
+		RF->generateTarget(atof(splitStrings[5].c_str()));
 		RF->generateAlfaPattern();
 	}
 	filein.close();

@@ -61,9 +61,9 @@ class ReceptiveFields {
 
 
 
-		virtual void linSpace(int start, int stop, int space, std::vector<double> returnArray);
-		virtual void zeros(std::vector<double> returnVector);
-		virtual void transposeMatrix(std::vector<double> initialArray, std::vector<double> returnArray, int numberOfDims);
+		virtual std::vector<double> linSpaceDouble(int start, int stop, int space);
+		virtual std::vector<int> linSpaceInt(int start, int stop, int space);
+		virtual std::vector<double> zeros(int size);
 
 		//Learning properties
 
