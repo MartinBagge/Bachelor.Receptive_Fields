@@ -10,10 +10,10 @@
 
 #include <cmath>
 #include <string>
-#include <iostream>
 #include <vector>
+//TODO: delete when testing is done
+#include <iostream>
 #include <fstream>
-//#include "boost/multi_array.hpp"
 
 class ReceptiveFields {
 
@@ -21,13 +21,14 @@ class ReceptiveFields {
 		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize);
 
 		~ReceptiveFields();
-
+		//TODO: delete toString method when testing is done
 		virtual void toString();
-		virtual void genTargetPattern(double (*func)(int));
-		virtual void generateTarget(double input);
 		virtual void createGaussianKernels();
 		virtual void generateAlfaPattern();
 		virtual void createStep(double step);
+		
+		//Method is used to give one point in the learning trajectory
+		virtual void generateTarget(double input);
 	private:
 		int targetcount;
 		int kernelCreationCounter;
@@ -35,50 +36,29 @@ class ReceptiveFields {
 		const int upperLimit;
 		const int numberOfKernels;
 		const double kernelWidth;
-/*
-		typedef boost::multi_array<double, 2> twoDimArray;
-		typedef twoDimArray::index index;
-
-		typedef boost::multi_array<double, 1> oneDimArray;
-
-		twoDimArray gaussianKernels;
-		oneDimArray kernelCenters;
-		oneDimArray alfa;
-		twoDimArray weights;
-		oneDimArray targetPattern;
-		twoDimArray transKernels;
-		twoDimArray transWeights;
-		twoDimArray transOutput;
-		twoDimArray output;
-*/
-
+	
 		std::vector<double> gaussianKernels2d;
 		std::vector<double> kernelCenters1d;
 		std::vector<double> alfa1d;
 		std::vector<double> weights1d;
-		std::vector<double> targetPattern1d;
-		std::vector<double> transKernels2d;
-		//std::vector<double> transWeights1d;
-		//std::vector<double> transOutput1d;
 		std::vector<double> output1d;
 
 
-
-		virtual std::vector<double> linSpaceDouble(int start, int stop, int space);
-		virtual std::vector<int> linSpaceInt(int start, int stop, int space);
+		//Util methods
+		virtual std::vector<double> linSpace(int start, int stop, int space);
 		virtual std::vector<double> zeros(int size);
 
 		//Learning properties
 
-
+		int targetcount;
 		const double learningRate;
 		const int learningIterations;
+		const int targetSize;
+		
+		std::vector<double> targetPattern1d;
 
 		virtual void applyDeltaRule();
 
-		//Learning target
-
-		const int targetSize;
 
 };
 #endif /* RECEPTIVEFIELDS_H_ */
