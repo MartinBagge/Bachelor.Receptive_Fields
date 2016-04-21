@@ -15,6 +15,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
   weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
+  	//TODO: delete cout
 	std::cout << "ReceptiveFields" << std::endl;
 	gaussianKernels2d[0] = targetSize;
 	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
@@ -25,17 +26,13 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 
 void ReceptiveFields::createGaussianKernels(){
 	int rowAdd;
+	//TODO: delete cout
 	std::cout << "gaussian" << std::endl;
 	for(int i = 0; i < numberOfKernels; i++){
 		rowAdd = i*gaussianKernels2d[0]+1;
 		for(int j = 0; j < gaussianKernels2d[0]; j++){
 			gaussianKernels2d[j+rowAdd] = exp(-pow(((double)(alfa1d[j]-kernelCenters1d[i])),2)/(2*kernelWidth));
-			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 		}
-	}
-	for(int k = 1; k < 267; k++){
-		//std::cout << gaussianKernels2d[k+(266*50)] << std::endl;
-
 	}
 	applyDeltaRule();
 }
@@ -67,8 +64,10 @@ void ReceptiveFields::generateAlfaPattern(){
 
 void ReceptiveFields::applyDeltaRule(){
 	double value;
+	//TODO: delete cout
 	std::cout << "delta rule" << std::endl;
 	std::vector<double> space = linSpace(1, targetSize, numberOfKernels);
+	//TODO: delete test loop
 	for(int i = 0; i < numberOfKernels; i++){
 		//std::cout << round(space[i]) << std::endl;
 	}
@@ -78,6 +77,7 @@ void ReceptiveFields::applyDeltaRule(){
 			for(int j = 0; j < numberOfKernels; j++){
 				value += gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j];
 			}
+			//TODO: delete test cout
 			if(k==500){
 
 				//std::cout << gaussianKernels2d[10*gaussianKernels2d[0]+1+i] << std::endl;
@@ -86,13 +86,16 @@ void ReceptiveFields::applyDeltaRule(){
 			output1d[i]=value;
 		}
 		for(int l = 0; l < numberOfKernels; l++){
+			//two different approches first one is prefferable
 			weights1d[l] += learningRate*(targetPattern1d[round(space[l])]-output1d[round(space[l])]);
 			//weights1d[l] += learningRate*(targetPattern1d[l]-output1d[l]);
+			//TODO: delete test cout
 			if(k == 500){
 				//std::cout << weights1d[l] << "," << targetPattern1d[l] << "," << alfa1d[l] << std::endl;
 			}
 		}
 	}
+	//TODO: delete both test couts
 	for(int i = 0; i < targetSize; i++){
 		//std::cout << output1d[i] << std::endl;
 	}
@@ -113,12 +116,14 @@ std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
 		}else{
 			tmp += addValue;
 			returnVector[i] = tmp;
+			//TODO: delete cout
 			//std::cout << returnVector[i] << std::endl;
 		}
 	}
 	return returnVector;
 }
 
+//method is mainly for testing purposes and should probably be deleted upon dilivering the framework
 void ReceptiveFields::toString(){
 	std::cout << "weights" << std::endl;
 	for (int i = 0; i < numberOfKernels; i++){
