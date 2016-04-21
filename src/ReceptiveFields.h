@@ -30,7 +30,6 @@ class ReceptiveFields {
 		//Method is used to give one point in the learning trajectory
 		virtual void generateTarget(double input);
 	private:
-		int targetcount;
 		int kernelCreationCounter;
 		const int lowerLimit;
 		const int upperLimit;

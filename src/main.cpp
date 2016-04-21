@@ -16,21 +16,23 @@ TEST(Re){
 int main(){
 	cout << "Test" << endl;
 
-	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 0.1, 0.2, 10000, 1061);
+	ReceptiveFields* RF = new ReceptiveFields(60, 120, 40, 0.1, 0.2, 1000, 106);
 	//Read data file
 	string inputString;
 	string token;
 	vector<string> splitStrings;
 	ifstream filein;
-	filein.open("runbot_data_multiplied.log");
-	while(getline(filein,inputString)){
-		stringstream lineStream(inputString);
-		splitStrings.clear();
-		while(getline(lineStream, token, ',')){
-			splitStrings.push_back(token);
-		}
-		RF->generateTarget(atof(splitStrings[5].c_str()));
-	}
+	filein.open("runbot_leftknee_output.log");
+	//while(getline(filein,inputString)){
+			//stringstream lineStream(inputString);
+			//splitStrings.clear();
+			while(getline(filein, token, ',')){
+				splitStrings.push_back(token);
+			}
+			for(int i = 0; i < splitStrings.size(); i++){
+				RF->generateTarget(atof(splitStrings[i].c_str()));
+			}
+		//}
 	filein.close();
 	RF->generateAlfaPattern();
 	RF->createGaussianKernels();
