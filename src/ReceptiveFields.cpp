@@ -17,7 +17,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
   weights1d(numberOfKernels), targetPattern1d(targetSize), transKernels2d(targetSize*numberOfKernels+1), output1d(targetSize){
 	std::cout << "ReceptiveFields" << std::endl;
 	gaussianKernels2d[0] = targetSize;
-	kernelCenters1d = linSpaceDouble(1, targetSize, numberOfKernels);
+	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
 	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 
@@ -68,7 +68,7 @@ void ReceptiveFields::generateAlfaPattern(){
 void ReceptiveFields::applyDeltaRule(){
 	double value;
 	std::cout << "delta rule" << std::endl;
-	std::vector<double> space = linSpaceDouble(1, targetSize, numberOfKernels);
+	std::vector<double> space = linSpace(1, targetSize, numberOfKernels);
 	for(int i = 0; i < numberOfKernels; i++){
 		//std::cout << round(space[i]) << std::endl;
 	}
@@ -103,7 +103,7 @@ void ReceptiveFields::applyDeltaRule(){
 }
 
 //might not be needed as inputs are preffered
-std::vector<double> ReceptiveFields::linSpaceDouble(int start, int stop, int space){
+std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
 	double addValue = (stop-start)/(double)space;
 	double tmp = 0;
 	std::vector<double> returnVector(space);
@@ -117,28 +117,6 @@ std::vector<double> ReceptiveFields::linSpaceDouble(int start, int stop, int spa
 		}
 	}
 	return returnVector;
-}
-
-std::vector<int> ReceptiveFields::linSpaceInt(int start, int stop, int space){
-	double addValue = (stop-start)/space;
-	std::cout << addValue << std::endl;
-	std::vector<int> returnVector(space);
-	double tmp = start;
-	for(int i = 0; i < space; i++){
-		tmp +=addValue;
-		returnVector[i] = round(tmp);
-		//std::cout << returnVector[i] << std::endl;
-	}
-	return returnVector;
-}
-
-
-//prob not needed
-void ReceptiveFields::genTargetPattern(double (func)(int)){
-	for(int i = 0; i < targetPattern1d.size(); i++){
-		double d = func(i);
-		targetPattern1d[i] = d;
-	}
 }
 
 void ReceptiveFields::toString(){
