@@ -23,7 +23,6 @@ class ReceptiveFields {
 		~ReceptiveFields();
 
 		virtual void toString();
-		virtual void genTargetPattern(double (*func)(int));
 		virtual void generateTarget(double input);
 		virtual void createGaussianKernels();
 		virtual void generateAlfaPattern();
@@ -62,8 +61,7 @@ class ReceptiveFields {
 
 
 
-		virtual std::vector<double> linSpaceDouble(int start, int stop, int space);
-		virtual std::vector<int> linSpaceInt(int start, int stop, int space);
+		virtual std::vector<double> linSpace(int start, int stop, int space);
 		virtual std::vector<double> zeros(int size);
 
 		//Learning properties
