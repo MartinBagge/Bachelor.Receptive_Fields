@@ -13,7 +13,6 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-//#include "boost/multi_array.hpp"
 
 class ReceptiveFields {
 
@@ -32,22 +31,6 @@ class ReceptiveFields {
 		const int upperLimit;
 		const int numberOfKernels;
 		const double kernelWidth;
-/*
-		typedef boost::multi_array<double, 2> twoDimArray;
-		typedef twoDimArray::index index;
-
-		typedef boost::multi_array<double, 1> oneDimArray;
-
-		twoDimArray gaussianKernels;
-		oneDimArray kernelCenters;
-		oneDimArray alfa;
-		twoDimArray weights;
-		oneDimArray targetPattern;
-		twoDimArray transKernels;
-		twoDimArray transWeights;
-		twoDimArray transOutput;
-		twoDimArray output;
-*/
 
 		std::vector<double> gaussianKernels2d;
 		std::vector<double> kernelCenters1d;
@@ -55,8 +38,6 @@ class ReceptiveFields {
 		std::vector<double> weights1d;
 		std::vector<double> targetPattern1d;
 		std::vector<double> transKernels2d;
-		//std::vector<double> transWeights1d;
-		//std::vector<double> transOutput1d;
 		std::vector<double> output1d;
 
 
