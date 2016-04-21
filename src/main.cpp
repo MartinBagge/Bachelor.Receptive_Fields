@@ -16,7 +16,7 @@ TEST(Re){
 int main(){
 	cout << "Test" << endl;
 
-	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 1, 0.1, 1000, 1061);
+	ReceptiveFields* RF = new ReceptiveFields(60, 120, 200, 0.1, 0.2, 10000, 1061);
 	//Read data file
 	string inputString;
 	string token;

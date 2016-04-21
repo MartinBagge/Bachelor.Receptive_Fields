@@ -26,10 +26,9 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 void ReceptiveFields::createGaussianKernels(){
 	int rowAdd;
 	std::cout << "gaussian" << std::endl;
-	for(int i = 0; i < numberOfKernels; i++){
-		rowAdd = i*gaussianKernels2d[0]+1;
-		for(int j = 0; j < gaussianKernels2d[0]; j++){
-			gaussianKernels2d[j+rowAdd] = exp(-pow(((double)(alfa1d[j]-kernelCenters1d[i])),2)/(2*kernelWidth));
+	for(int i = 0; i < gaussianKernels2d[0]; i++){
+		for(int j = 0; j < numberOfKernels; j++){
+			gaussianKernels2d[i+j*gaussianKernels2d[0]+1] = exp(-pow(((double)(kernelCenters1d[j]-alfa1d[i])),2)/(2*kernelWidth));
 			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 		}
 	}
@@ -38,6 +37,19 @@ void ReceptiveFields::createGaussianKernels(){
 
 	}
 	applyDeltaRule();
+}
+
+void ReceptiveFields::createStep(double step){
+
+	//TODO: check for rewrite correctness
+	int rowAdd;
+		std::cout << "gaussian" << std::endl;
+		for(int i = 0; i < numberOfKernels; i++){
+			rowAdd = i*gaussianKernels2d[0]+1;
+			gaussianKernels2d[kernelCreationCounter+rowAdd] = exp(-pow(((double)(kernelCenters1d[i]-step)),2)/(2*kernelWidth));
+			kernelCreationCounter++;
+			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
+		}
 }
 
 std::vector<double> ReceptiveFields::zeros(int size){
@@ -157,15 +169,13 @@ void ReceptiveFields::toString(){
 	// Gaussian kernels write file
 	std::ofstream fileKernels;
 	fileKernels.open("datasetKernels.csv");
-	int rowAdd;
-	for(int i = 0; i < numberOfKernels; i++){
-			rowAdd = i*gaussianKernels2d[0]+1;
-			for(int j = 0; j < gaussianKernels2d[0]; j++){
+	for(int i = 0; i < targetSize; i++){
+			for(int j = 0; j < numberOfKernels; j++){
 
 				if(j == gaussianKernels2d[0]-1){
-					fileKernels << gaussianKernels2d[j+rowAdd];
+					fileKernels << gaussianKernels2d[j*gaussianKernels2d[0]+1+i];
 				}else{
-					fileKernels << gaussianKernels2d[j+rowAdd] << ",";
+					fileKernels << gaussianKernels2d[j*gaussianKernels2d[0]+1+i] << ",";
 				}
 				//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 			}

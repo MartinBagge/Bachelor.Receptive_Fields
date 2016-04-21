@@ -27,8 +27,10 @@ class ReceptiveFields {
 		virtual void generateTarget(double input);
 		virtual void createGaussianKernels();
 		virtual void generateAlfaPattern();
+		virtual void createStep(double step);
 	private:
 		int targetcount;
+		int kernelCreationCounter;
 		const int lowerLimit;
 		const int upperLimit;
 		const int numberOfKernels;
