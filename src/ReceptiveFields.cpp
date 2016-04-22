@@ -112,7 +112,7 @@ void ReceptiveFields::applyDeltaRule(){
 		}
 		for(int l = 0; l < numberOfKernels; l++){
 			//two different approches first one is prefferable
-			weights1d[l] = weights1d[l]+(learningRate*((double)targetPattern1d[round(space[l])]-(double)output1d[round(space[l])]));
+			weights1d[l] += learningRate*((double)targetPattern1d[round(space[l])]-(double)output1d[round(space[l])]);
 			//weights1d[l] += learningRate*(targetPattern1d[l]-output1d[l]);
 			//TODO: delete test cout
 			if(k == 500){
