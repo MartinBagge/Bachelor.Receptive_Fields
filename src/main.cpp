@@ -36,6 +36,6 @@ int main(){
 	filein.close();
 	RF->generateAlfaPattern();
 	RF->createGaussianKernels();
-	RF->toString();
+	//RF->toString();
 	return 0;
 }

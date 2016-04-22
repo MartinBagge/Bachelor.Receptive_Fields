@@ -33,6 +33,15 @@ void ReceptiveFields::createGaussianKernels(){
 		for(int j = 0; j < numberOfKernels; j++){
 			gaussianKernels2d[i+j*gaussianKernels2d[0]+1] = exp(-pow(kernelCenters1d[j]-alfa1d[i],2)/(2*kernelWidth));
 			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
+			  if (i == 21){
+			    std::cout << ". " << std::endl;
+			    std::cout << "a, center-alfa²: " << pow(kernelCenters1d[j]-alfa1d[i],2) << std::endl;
+			    std::cout << "b, 2*width: " << 2*kernelWidth << std::endl;
+			    std::cout << "c, a/b: " << pow(kernelCenters1d[j]-alfa1d[i],2)/(2*kernelWidth) << std::endl;
+			    std::cout << "d, -c: " << -(pow(kernelCenters1d[j]-alfa1d[i],2))/(2*kernelWidth) << std::endl;
+			    std::cout << "e, exp(d): " << exp(-(pow(kernelCenters1d[j]-alfa1d[i],2))/(2*kernelWidth)) << std::endl;
+			    std::cout << ". " << std::endl;
+			   }
 		}
 	}
 	applyDeltaRule();
@@ -135,7 +144,7 @@ std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
 	return returnVector;
 }
 
-//method is mainly for testing purposes and should probably be deleted upon dilivering the framework
+//method is mainly for testing purposes and should probably be deleted upon delievering the framework
 void ReceptiveFields::toString(){
 	std::cout << "weights" << std::endl;
 	for (int i = 0; i < numberOfKernels; i++){
