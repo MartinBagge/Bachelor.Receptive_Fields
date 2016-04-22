@@ -31,17 +31,9 @@ void ReceptiveFields::createGaussianKernels(){
 	std::cout << "gaussian" << std::endl;
 	for(int i = 0; i < gaussianKernels2d[0]; i++){
 		for(int j = 0; j < numberOfKernels; j++){
-			gaussianKernels2d[i+j*gaussianKernels2d[0]+1] = exp(-pow(kernelCenters1d[j]-alfa1d[i],2)/(2*kernelWidth));
+			gaussianKernels2d[i+j*gaussianKernels2d[0]+1] = exp((-pow((double)kernelCenters1d[j]-alfa1d[i],2)/2)*kernelWidth);
 			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
-			  if (i == 21){
-			    std::cout << ". " << std::endl;
-			    std::cout << "a, center-alfa²: " << pow(kernelCenters1d[j]-alfa1d[i],2) << std::endl;
-			    std::cout << "b, 2*width: " << 2*kernelWidth << std::endl;
-			    std::cout << "c, a/b: " << pow(kernelCenters1d[j]-alfa1d[i],2)/(2*kernelWidth) << std::endl;
-			    std::cout << "d, -c: " << -(pow(kernelCenters1d[j]-alfa1d[i],2))/(2*kernelWidth) << std::endl;
-			    std::cout << "e, exp(d): " << exp(-(pow(kernelCenters1d[j]-alfa1d[i],2))/(2*kernelWidth)) << std::endl;
-			    std::cout << ". " << std::endl;
-			   }
+
 		}
 	}
 	applyDeltaRule();
@@ -52,7 +44,7 @@ void ReceptiveFields::createStep(double step){
 	//TODO: check for rewrite correctness
 		std::cout << "gaussian" << std::endl;
 		for(int i = 0; i < numberOfKernels; i++){
-			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp(-pow(((double)(kernelCenters1d[i]-step)),2)/(2*kernelWidth));
+			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp((-pow(((double)(kernelCenters1d[i]-step)),2)/2)*kernelWidth);
 			//std::cout << alfa1d[j] << " , " << kernelCenters1d[i] << std::endl;
 		}
 		kernelCreationCounter++;
@@ -78,6 +70,7 @@ void ReceptiveFields::generateTarget(double input){
 }
 
 void ReceptiveFields::generateAlfaPattern(){
+	std::cout << "alfa" << std::endl;
 	for(int i = 0; i<targetSize; i++){
 		alfa1d[i]=i+1;
 	}
@@ -97,11 +90,22 @@ void ReceptiveFields::applyDeltaRule(){
 			value = 0;
 			for(int j = 0; j < numberOfKernels; j++){
 				value += gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j];
+				  if (i == 1 && k == learningIterations-1){
+					std::cout << i << std::endl;
+				    std::cout << ". " << std::endl;
+				    std::cout << "single value" << gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j] << std::endl;
+				    std::cout << "weights" << weights1d[j] << std::endl;
+				    std::cout << "gaussian value" << gaussianKernels2d[j*gaussianKernels2d[0]+1+i] << std::endl;
+				    std::cout << ". " << std::endl;
+				   }
 			}
 			//TODO: delete test cout
 			if(k==500){
 
 				//std::cout << gaussianKernels2d[10*gaussianKernels2d[0]+1+i] << std::endl;
+			}
+			if(i == 1 && k == learningIterations-1){
+				std::cout << value << std::endl;
 			}
 
 			output1d[i]=value;
@@ -127,13 +131,14 @@ void ReceptiveFields::applyDeltaRule(){
 }
 
 //might not be needed as inputs are preffered
-std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
-	double addValue = (stop-start)/(double)space;
+std::vector<double> ReceptiveFields::linSpace(double start, double stop, double space){
+	double addValue = (stop-start)/(space-1);
 	double tmp = 0;
 	std::vector<double> returnVector(space);
 	for(int i = 0; i < space; i++){
 		if(i == 0){
 			returnVector[i] = start;
+			tmp = start;
 		}else{
 			tmp += addValue;
 			returnVector[i] = tmp;
@@ -148,17 +153,20 @@ std::vector<double> ReceptiveFields::linSpace(int start, int stop, int space){
 void ReceptiveFields::toString(){
 	std::cout << "weights" << std::endl;
 	for (int i = 0; i < numberOfKernels; i++){
+		//std::cout << i+1 << " , "<< kernelCenters1d[i] << std::endl;
 		//std::cout << weights1d[i] << std::endl;
 		//std::cout << gaussianKernels2d[200+1+i*gaussianKernels2d[0]] << std::endl;
 	}
+	std::cout << "done" << std::endl;
 
-	std::cout << "output" << std::endl;
+	//std::cout << "output" << std::endl;
 	for(int i = 0; i < targetSize; i++){
-		std::cout << i << "," << output1d[i] << "," << targetPattern1d[i] << std::endl;
+		//std::cout << i << "," << output1d[i] << "," << targetPattern1d[i] << std::endl;
 		//std::cout << alfa1d[i] << std::endl;
 	}
 
 	// Gaussian kernels write file
+/*
 	std::ofstream fileKernels;
 	fileKernels.open("datasetKernels.csv");
 	for(int i = 0; i < numberOfKernels; i++){
@@ -173,6 +181,6 @@ void ReceptiveFields::toString(){
 			}
 			fileKernels << "\n";
 		}
-	fileKernels.close();
+*/
 
 }

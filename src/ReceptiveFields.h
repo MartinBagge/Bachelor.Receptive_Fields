@@ -44,7 +44,7 @@ class ReceptiveFields {
 
 
 		//Util methods
-		virtual std::vector<double> linSpace(int start, int stop, int space);
+		virtual std::vector<double> linSpace(double start, double stop, double space);
 		virtual std::vector<double> zeros(int size);
 
 		//Learning properties
