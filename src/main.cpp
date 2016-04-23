@@ -16,7 +16,7 @@ TEST(Re){
 int main(){
 	cout << "Test" << endl;
 
-	ReceptiveFields* RF = new ReceptiveFields(60, 120, 40, 0.1, 0.4, 10000, 85);
+	ReceptiveFields* RF = new ReceptiveFields(60, 120, 40, 0.1, 0.4, 50000, 85);
 	//Read data file
 	string inputString;
 	string token;
@@ -35,11 +35,11 @@ int main(){
 			}
 			std::cout << "fileread done" << std::endl;
 		//}
-	std::cout << splitStrings.size() << std::endl;
-	RF->generateAlfaPattern();
-
-	RF->createGaussianKernels();
-	RF->toString();
-	cout << "returning 0" << endl;
+	int tmp = 1;
+	for(int i = 0; i < 85; i++){
+		RF->createStep(tmp);
+		tmp++;
+	}
+	RF->applyDeltaRule();
 	return 0;
 }

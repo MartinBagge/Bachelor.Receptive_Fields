@@ -22,10 +22,8 @@ class ReceptiveFields {
 
 		~ReceptiveFields();
 		//TODO: delete toString method when testing is done
-		virtual void toString();
-		virtual void createGaussianKernels();
-		virtual void generateAlfaPattern();
 		virtual void createStep(double step);
+		virtual void applyDeltaRule();
 		
 		//Method is used to give one point in the learning trajectory
 		virtual void generateTarget(double input);
@@ -55,8 +53,6 @@ class ReceptiveFields {
 		const int targetSize;
 		
 		std::vector<double> targetPattern1d;
-
-		virtual void applyDeltaRule();
 
 
 };
