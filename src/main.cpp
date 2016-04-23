@@ -35,7 +35,7 @@ int main(){
 			}
 			std::cout << "fileread done" << std::endl;
 		//}
-	std::cout << "file closed" << std::endl;
+	std::cout << splitStrings.size() << std::endl;
 	RF->generateAlfaPattern();
 
 	RF->createGaussianKernels();

@@ -78,67 +78,28 @@ void ReceptiveFields::generateAlfaPattern(){
 
 void ReceptiveFields::applyDeltaRule(){
 	double value;
-	//TODO: delete cout
-	std::cout << "delta rule" << std::endl;
-	std::vector<double> space = linSpace(1, targetSize, numberOfKernels);
-	//TODO: delete test loop
-	for(int i = 0; i < numberOfKernels; i++){
-		//std::cout << round(space[i]) << std::endl;
-	}
 	for(int k = 0; k < learningIterations; k++){
 		for(int i = 0; i < targetSize; i++){
 			value = 0;
 			for(int j = 0; j < numberOfKernels; j++){
-				value += gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j];
-				  if (i == 1 && k == learningIterations-1){
-					std::cout << i << std::endl;
-				    std::cout << ". " << std::endl;
-				    std::cout << "single value" << gaussianKernels2d[j*gaussianKernels2d[0]+1+i]*weights1d[j] << std::endl;
-				    std::cout << "weights" << weights1d[j] << std::endl;
-				    std::cout << "gaussian value" << gaussianKernels2d[j*gaussianKernels2d[0]+1+i] << std::endl;
-				    std::cout << ". " << std::endl;
-				   }
+				value += gaussianKernels2d[(j*gaussianKernels2d[0]+1+i)]*weights1d[j];
 			}
-			//TODO: delete test cout
-			if(k==500){
-
-				//std::cout << gaussianKernels2d[10*gaussianKernels2d[0]+1+i] << std::endl;
-			}
-			if(i == 1 && k == learningIterations-1){
-				std::cout << value << std::endl;
-			}
-
 			output1d[i]=value;
 		}
 		for(int l = 0; l < numberOfKernels; l++){
-			//two different approches first one is prefferable
-			weights1d[l] += learningRate*((double)targetPattern1d[round(space[l])]-(double)output1d[round(space[l])]);
-			//weights1d[l] += learningRate*(targetPattern1d[l]-output1d[l]);
-			//TODO: delete test cout
-			if(k == 500){
-				//std::cout << weights1d[l] << "," << targetPattern1d[l] << "," << alfa1d[l] << std::endl;
-			}
+			weights1d[l] += learningRate*((double)targetPattern1d[round(kernelCenters1d[l])]-(double)output1d[round(kernelCenters1d[l])]);
 		}
 	}
-	//TODO: delete both test couts
-	for(int i = 0; i < targetSize; i++){
-		//std::cout << output1d[i] << std::endl;
-	}
-	for(int l = 0; l < numberOfKernels; l++){
-		//std::cout << weights1d[l] << std::endl;
-	}
-
 }
 
 //might not be needed as inputs are preffered
 std::vector<double> ReceptiveFields::linSpace(double start, double stop, double space){
 	double addValue = (stop-start)/(space-1);
-	double tmp = 0;
+	double tmp = start;
 	std::vector<double> returnVector(space);
 	for(int i = 0; i < space; i++){
 		if(i == 0){
 			returnVector[i] = start;
-			tmp = start;
 		}else{
 			tmp += addValue;
 			returnVector[i] = tmp;
