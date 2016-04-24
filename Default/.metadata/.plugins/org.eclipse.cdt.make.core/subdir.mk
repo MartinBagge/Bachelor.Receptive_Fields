@@ -22,14 +22,14 @@ CPP_DEPS += \
 # Each subdirectory must supply rules for building sources it contributes
 .metadata/.plugins/org.eclipse.cdt.make.core/%.o: ../.metadata/.plugins/org.eclipse.cdt.make.core/%.c
 	@echo 'Building file: $<'
-	@echo 'Invoking: Cygwin C Compiler'
+	@echo 'Invoking: C Compiler'
 	gcc -O2 -g -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 .metadata/.plugins/org.eclipse.cdt.make.core/%.o: ../.metadata/.plugins/org.eclipse.cdt.make.core/%.cpp
 	@echo 'Building file: $<'
-	@echo 'Invoking: Cygwin C++ Compiler'
+	@echo 'Invoking: C++ Compiler'
 	g++ -O2 -g -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '

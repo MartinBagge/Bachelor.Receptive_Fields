@@ -14,6 +14,9 @@ RM := rm
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(strip $(CU_DEPS)),)
+-include $(CU_DEPS)
+endif
 ifneq ($(strip $(C++_DEPS)),)
 -include $(C++_DEPS)
 endif
@@ -44,14 +47,14 @@ all: Bachelor.Receptive_Fields
 # Tool invocations
 Bachelor.Receptive_Fields: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: Cygwin C++ Linker'
-	g++  -o "Bachelor.Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Invoking: C++ Linker'
+	g++ -L/usr/local/cuda/lib64 -o "Bachelor.Receptive_Fields" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(C++_DEPS)$(OBJS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) Bachelor.Receptive_Fields
+	-$(RM) $(CU_DEPS)$(MOC_OUTPUT_OUTPUTS)$(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) Bachelor.Receptive_Fields
 	-@echo ' '
 
 .PHONY: all clean dependents

@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.base.1252214910/PATH/delimiter=\:
+environment/project/cdt.managedbuild.toolchain.gnu.base.1252214910/PATH/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.base.1252214910/PATH/value=/usr/local/cuda/bin
+environment/project/cdt.managedbuild.toolchain.gnu.base.1252214910/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.base.1252214910/appendContributed=true

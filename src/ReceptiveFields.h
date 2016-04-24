@@ -14,6 +14,7 @@
 //TODO: delete when testing is done
 #include <iostream>
 #include <fstream>
+#include "Parallelize.cuh"
 
 class ReceptiveFields {
 
@@ -28,6 +29,7 @@ class ReceptiveFields {
 		//Method is used to give one point in the learning trajectory
 		virtual void generateTarget(double input);
 	private:
+		Parallelize para;
 		int kernelCreationCounter;
 		const int lowerLimit;
 		const int upperLimit;

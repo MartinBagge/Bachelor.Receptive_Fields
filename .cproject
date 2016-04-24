@@ -5,45 +5,52 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.base.1252214910" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.Cygwin_PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="ai3.errorparser.cuda_qt.nvccerrorparser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.1252214910" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979" name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.cygwin.base.1810964141" name="Cygwin GCC" superClass="cdt.managedbuild.toolchain.gnu.cygwin.base">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.Cygwin_PE" id="cdt.managedbuild.target.gnu.platform.cygwin.base.21297549" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.cygwin.base"/>
-							<builder buildPath="${workspace_loc:/Receptive_Fields}/Default" id="cdt.managedbuild.target.gnu.builder.cygwin.base.1213854502" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.cygwin.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.cygwin.base.1528259270" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.base">
-								<option id="gnu.both.asm.option.include.paths.244512743" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+						<toolChain id="ai3.toolchain.cuda_qt.361763729" name="CUDA Toolchain with QT" superClass="ai3.toolchain.cuda_qt">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ai3.target.cuda_qt.46021928" name="CUDA Platform" osList="linux,hpux,aix,qnx" superClass="ai3.target.cuda_qt"/>
+							<builder buildPath="${workspace_loc:/Bachelor.Receptive_Fields}/Default" id="ai3.target.cuda_qt.builder.1662348862" keepEnvironmentInBuildfile="false" name="CUDA Builder" superClass="ai3.target.cuda_qt.builder"/>
+							<tool id="ai3.toolchain.cuda_qt.moc.228784890" name="QT Meta-Object Compiler" superClass="ai3.toolchain.cuda_qt.moc"/>
+							<tool id="ai3.tool.cuda_qt.cpp_compiler.652605527" name="C++ Compiler" superClass="ai3.tool.cuda_qt.cpp_compiler">
+								<inputType id="ai3.tool.cuda_qt.cpp_compiler.input.1171523242" superClass="ai3.tool.cuda_qt.cpp_compiler.input"/>
+							</tool>
+							<tool id="ai3.tool.cuda_qt.c_compiler.883790437" name="C Compiler" superClass="ai3.tool.cuda_qt.c_compiler">
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1414467194" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="ai3.tool.cuda_qt.nvcc.246714421" name="CUDA NVCC Compiler" superClass="ai3.tool.cuda_qt.nvcc">
+								<inputType id="ai3.tool.cuda_qt.nvcc.input.156630971" name="CUDA Input" superClass="ai3.tool.cuda_qt.nvcc.input"/>
+							</tool>
+							<tool id="ai3.tool.cuda_qt.c_linker.1038497018" name="C Linker" superClass="ai3.tool.cuda_qt.c_linker"/>
+							<tool id="ai3.tool.cuda_qt.cpp_linker.1581202463" name="C++ Linker" superClass="ai3.tool.cuda_qt.cpp_linker">
+								<option id="gnu.cpp.link.option.libs.1541659325" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="cudart"/>
+								</option>
+								<option id="gnu.cpp.link.option.paths.1562916169" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/usr/local/cuda/lib64"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1160069029" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="ai3.tool.cuda_qt.gnu_archiver.585712753" name="GNU Archiver" superClass="ai3.tool.cuda_qt.gnu_archiver"/>
+							<tool id="ai3.tool.cuda_qt.gnu_assembler.218976100" name="GNU Assembler" superClass="ai3.tool.cuda_qt.gnu_assembler">
+								<option id="gnu.both.asm.option.include.paths.1391102655" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu"/>
 									<listOptionValue builtIn="false" value="/home/martin/boost/boost_1_60_0"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost"/>
 								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.956203468" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.cygwin.base.293117152" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.cygwin.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base.158962180" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base">
-								<option id="gnu.cpp.compiler.option.include.paths.1642392588" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin.1811666604" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base.1761348539" name="Cygwin C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.cygwin.base">
-								<option id="gnu.c.compiler.option.include.paths.1286240936" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath"/>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin.1624657437" superClass="cdt.managedbuild.tool.gnu.c.compiler.input.cygwin"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.base.943908559" name="Cygwin C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base.620267218" name="Cygwin C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.base">
-								<option id="gnu.cpp.link.option.paths.1681879919" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths"/>
-								<option id="gnu.cpp.link.option.libs.870960384" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs"/>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.227795669" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1774341135" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>

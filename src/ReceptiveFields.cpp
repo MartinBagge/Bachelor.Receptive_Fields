@@ -20,13 +20,17 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 	kernelCreationCounter = 0;
-
+	para = new Parallelize();
 }
 
 void ReceptiveFields::createStep(double step){
+	if(false){
 		for(int i = 0; i < numberOfKernels; i++){
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp((-pow(((double)(kernelCenters1d[i]-step)),2)/2)*kernelWidth);
 		}
+	}else{
+		std::vector<double> = para.createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
+	}
 		kernelCreationCounter++;
 }
 
