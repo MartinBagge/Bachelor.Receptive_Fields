@@ -26,7 +26,7 @@ class Parallelize {
 		~Parallelize();
 		std::vector<double> createKernels(std::vector<double> centers, double step, double width, int size);
 	private:
-		void d_createKernels(double *centers, double step, double width, double *kernelsArr);
+		void d_createKernels(double *centers, double step, double width, double *kernelsArr, int centerSize, int kernelSize);
 };
 #endif /* PARALLELIZE_H_ */
 
