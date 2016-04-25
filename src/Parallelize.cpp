@@ -74,14 +74,14 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 	return returnVector;
 }
 
-__global__ void d_calcOutput(double *weights, double *kernels, double *output, int size, int loop, double *values){
+__global__ void d_calcOutput(double *weights, double *kernels, double *output, int loop, int size, double *values){
 	int i = threadIdx.x;
 	if(i < size){
 		for(int j = 0; j < loop; j++){
 			if(j == 0){
-				values[j] = kernels[((i*loop+1)*j)]*weights[i];
+				values[j] = kernels[((j*size+1)*i)]*weights[j];
 			}else{
-				values[j] = values[j-1]+kernels[((i*loop+1)*j)]*weights[i];
+				values[j] = values[j-1]+kernels[((j*size+1)*i)]*weights[j];
 			}
 		}
 		output[i]=values[loop-1];
@@ -101,12 +101,20 @@ void Parallelize::calcOutput(double *weights, double *kernels, double *output, i
 	  cudaMemcpy(d_output, output, targetSize*sizeof(double), cudaMemcpyHostToDevice);
 	  cudaMemcpy(d_values, values, targetSize*sizeof(double), cudaMemcpyHostToDevice);
 
+	  for (int i = 0; i < targetSize; i++){
+		  //std::cout << "output before: " << output[i] << std::endl;
+	  }
+
 	  //function call
-	  d_calcOutput<<<1,centerSize>>>(d_weights, d_kernels, d_output, centerSize, targetSize, d_values);
+	  d_calcOutput<<<1,targetSize>>>(d_weights, d_kernels, d_output, centerSize, targetSize, d_values);
 
 	  cudaDeviceSynchronize();
 
 	  cudaMemcpy(output, d_output, targetSize*sizeof(double), cudaMemcpyDeviceToHost);
+
+	  for (int i = 0; i < targetSize; i++){
+		  //std::cout << "output after: " << output[i] << std::endl;
+	  }
 
 	  cudaFree(d_weights);
 	  cudaFree(d_output);
@@ -114,49 +122,56 @@ void Parallelize::calcOutput(double *weights, double *kernels, double *output, i
 	  cudaFree(d_values);
 }
 
-__global__ void d_updateWeights(double *learningRate, double *centers, double *target, double *output, double *weights, int size){
+__global__ void d_updateWeights(double learningRate, double *centers, double *target, double *output, double *weights, int size){
 	int i = threadIdx.x;
 	if(i < size){
-		weights[i] = weights[i]+learningRate[i]*(target[llrint(centers[i])]-output[llrint(centers[i])]);
+		weights[i] += learningRate*(target[llrint(centers[i])]-output[llrint(centers[i])]);
 	}
 }
 
 void Parallelize::updateWeights(double learningRate, double *centers, double *target, double *output, double *weights, int centerSize, int targetSize){
-	  double learningRateArr[centerSize], *d_centers, *d_target, *d_output, *d_weights, *d_learningRate;
+	  double *d_centers, *d_target, *d_output, *d_weights;
 
 	  cudaMalloc((void**)&d_centers, centerSize*sizeof(double));
 	  cudaMalloc((void**)&d_target, targetSize*sizeof(double));
 	  cudaMalloc((void**)&d_output, targetSize*sizeof(double));
 	  cudaMalloc((void**)&d_weights, centerSize*sizeof(double));
-	  cudaMalloc((void**)&d_learningRate, centerSize*sizeof(double));
 
-	  for(int i = 0; i < centerSize; i++){
-		  learningRateArr[i] = learningRate;
-	  }
 
 	  cudaMemcpy(d_centers, centers, centerSize*sizeof(double), cudaMemcpyHostToDevice);
 	  cudaMemcpy(d_target, target, targetSize*sizeof(double), cudaMemcpyHostToDevice);
 	  cudaMemcpy(d_output, output, targetSize*sizeof(double), cudaMemcpyHostToDevice);
 	  cudaMemcpy(d_weights, weights, centerSize*sizeof(double), cudaMemcpyHostToDevice);
-	  cudaMemcpy(d_learningRate, learningRateArr, centerSize*sizeof(double), cudaMemcpyHostToDevice);
+	  for (int i = 0; i < centerSize; i++){
+	  		  //std::cout << i << " weights before: " << weights[i] << "    centers: " << centers[i] << std::endl;
+	  		//std::cout << learningRate*(target[llrint(centers[i])]-output[llrint(centers[i])]) << std::endl;
+	  	  }
+	  for (int i = 0; i < targetSize; i++){
+		  //std::cout<< i << "target: " << target[i] << "   output: " << output[i] << std::endl;
 
+	  }
+	  //std::cout << "learningRate: " << learningRate << "  centerSize: " << centerSize << std::endl;
 	  //function call
-	  d_updateWeights<<<1,centerSize>>>(d_learningRate, d_centers, d_target, d_output, d_weights, centerSize);
+	  d_updateWeights<<<1,centerSize>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
 
 	  cudaDeviceSynchronize();
 
 	  cudaMemcpy(weights, d_weights, centerSize*sizeof(double), cudaMemcpyDeviceToHost);
 
+	  for (int i = 0; i < centerSize; i++){
+		  weights[i] = learningRate*(target[llrint(centers[i])]-output[llrint(centers[i])]);
+	  	  		  std::cout << i << " weights after: " << weights[i] << std::endl;
+	  	  	  }
+
 	  cudaFree(d_centers);
 	  cudaFree(d_target);
 	  cudaFree(d_output);
 	  cudaFree(d_weights);
-	  cudaFree(d_learningRate);
 
 }
 
 std::vector<double> Parallelize::applyDeltaRule(double learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations){
-	std::vector<double> finalOutput(kernels[0]);
+	std::vector<double> finalOutput(target.size());
 	double centersArr[centers.size()];
 	std::copy(centers.begin(), centers.end(), centersArr);
 	double targetArr[target.size()];
@@ -171,6 +186,18 @@ std::vector<double> Parallelize::applyDeltaRule(double learningRate, std::vector
 	for(int i = 0; i < learningIterations; i++){
 		calcOutput(weightsArr, kernelsArr, outputArr, centers.size(), target.size(), kernels.size());
 		updateWeights(learningRate, centersArr, targetArr, outputArr, weightsArr, centers.size(), target.size());
+		if(i==1000 || i == 10000 || i == 20000 || i == 40000){
+			for(int i = 0; i < target.size(); i++){
+				//std::cout<< "target: " << targetArr[i] << std::endl;
+			}
+			for(int j = 0; j < centers.size(); j++){
+				//std::cout<< "weight: " << weightsArr[j] << std::endl;
+			}
+		}
+	}
+
+	for(int i = 0; i < finalOutput.size(); i++){
+		finalOutput[i] = outputArr[i];
 	}
 
 	return finalOutput;
