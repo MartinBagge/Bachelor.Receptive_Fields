@@ -58,10 +58,11 @@ void ReceptiveFields::generateTarget(double input){
 
 void ReceptiveFields::applyDeltaRule(){
 	double value;
-	for(int k = 0; k < learningIterations; k++){
-		if(use_gpu){
-			output1d = para->applyDeltaRule(learningRate, kernelCenters1d, targetPattern1d, weights1d, gaussianKernels2d);
-		}else{
+
+	if(use_gpu){
+		output1d = para->applyDeltaRule(learningRate, kernelCenters1d, targetPattern1d, weights1d, gaussianKernels2d, learningIterations);
+	}else{
+		for(int k = 0; k < learningIterations; k++){
 			for(int i = 0; i < targetSize; i++){
 				value = 0;
 				for(int j = 0; j < numberOfKernels; j++){
