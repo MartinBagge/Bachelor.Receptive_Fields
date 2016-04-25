@@ -15,23 +15,33 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.1252214910" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactExtension="" artifactName="${ProjName}" buildProperties="" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;ai3.errorparser.cuda_qt.nvccerrorparser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.toolchain.gnu.base.1252214910" name="Default" parent="org.eclipse.cdt.build.core.emptycfg" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="" prebuildStep="">
 					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979" name="/" resourcePath="">
-						<toolChain id="ai3.toolchain.cuda_qt.361763729" name="CUDA Toolchain with QT" superClass="ai3.toolchain.cuda_qt">
+						<toolChain errorParsers="" id="ai3.toolchain.cuda_qt.361763729" name="CUDA Toolchain with QT" superClass="ai3.toolchain.cuda_qt">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ai3.target.cuda_qt.46021928" name="CUDA Platform" osList="linux,hpux,aix,qnx" superClass="ai3.target.cuda_qt"/>
-							<builder buildPath="${workspace_loc:/Bachelor.Receptive_Fields}/Default" id="ai3.target.cuda_qt.builder.1662348862" keepEnvironmentInBuildfile="false" name="CUDA Builder" superClass="ai3.target.cuda_qt.builder"/>
-							<tool id="ai3.toolchain.cuda_qt.moc.228784890" name="QT Meta-Object Compiler" superClass="ai3.toolchain.cuda_qt.moc"/>
-							<tool id="ai3.tool.cuda_qt.cpp_compiler.652605527" name="C++ Compiler" superClass="ai3.tool.cuda_qt.cpp_compiler">
+							<builder arguments="-f makefileMartin" buildPath="${workspace_loc:/Bachelor.Receptive_Fields/src}" command="make" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="ai3.target.cuda_qt.builder.1662348862" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="CUDA Builder" superClass="ai3.target.cuda_qt.builder"/>
+							<tool command="moc" commandLinePattern="${command} ${flags} ${output_flag} ${output} ${inputs}" errorParsers="" id="ai3.toolchain.cuda_qt.moc.228784890" name="QT Meta-Object Compiler" superClass="ai3.toolchain.cuda_qt.moc"/>
+							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="ai3.tool.cuda_qt.cpp_compiler.652605527" name="C++ Compiler" superClass="ai3.tool.cuda_qt.cpp_compiler">
+								<option id="ai3.tool.cuda_qt.cpp_compiler.option.include.paths.1819639594" name="Include Paths (-I)" superClass="ai3.tool.cuda_qt.cpp_compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/local/cuda-7.5/include"/>
+								</option>
 								<inputType id="ai3.tool.cuda_qt.cpp_compiler.input.1171523242" superClass="ai3.tool.cuda_qt.cpp_compiler.input"/>
 							</tool>
-							<tool id="ai3.tool.cuda_qt.c_compiler.883790437" name="C Compiler" superClass="ai3.tool.cuda_qt.c_compiler">
+							<tool command="gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="ai3.tool.cuda_qt.c_compiler.883790437" name="C Compiler" superClass="ai3.tool.cuda_qt.c_compiler">
+								<option id="gnu.c.compiler.option.dialect.std.1310566543" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.include.paths.1931491934" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/local/cuda-7.5/include"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1414467194" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="ai3.tool.cuda_qt.nvcc.246714421" name="CUDA NVCC Compiler" superClass="ai3.tool.cuda_qt.nvcc">
+							<tool command="nvcc -c" commandLinePattern="${command} ${flags} ${output_flag} ${output} ${inputs}" errorParsers="ai3.errorparser.cuda_qt.nvccerrorparser" id="ai3.tool.cuda_qt.nvcc.246714421" name="CUDA NVCC Compiler" superClass="ai3.tool.cuda_qt.nvcc">
+								<option id="ai3.tool.cuda_qt.nvcc.includes.incpath.1693769614" name="Include Paths (-I)" superClass="ai3.tool.cuda_qt.nvcc.includes.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/local/cuda-7.5/include"/>
+								</option>
 								<inputType id="ai3.tool.cuda_qt.nvcc.input.156630971" name="CUDA Input" superClass="ai3.tool.cuda_qt.nvcc.input"/>
 							</tool>
 							<tool id="ai3.tool.cuda_qt.c_linker.1038497018" name="C Linker" superClass="ai3.tool.cuda_qt.c_linker"/>
-							<tool id="ai3.tool.cuda_qt.cpp_linker.1581202463" name="C++ Linker" superClass="ai3.tool.cuda_qt.cpp_linker">
+							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="ai3.tool.cuda_qt.cpp_linker.1581202463" name="C++ Linker" superClass="ai3.tool.cuda_qt.cpp_linker">
 								<option id="gnu.cpp.link.option.libs.1541659325" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="cudart"/>
 								</option>
@@ -44,12 +54,12 @@
 								</inputType>
 							</tool>
 							<tool id="ai3.tool.cuda_qt.gnu_archiver.585712753" name="GNU Archiver" superClass="ai3.tool.cuda_qt.gnu_archiver"/>
-							<tool id="ai3.tool.cuda_qt.gnu_assembler.218976100" name="GNU Assembler" superClass="ai3.tool.cuda_qt.gnu_assembler">
+							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="ai3.tool.cuda_qt.gnu_assembler.218976100" name="GNU Assembler" superClass="ai3.tool.cuda_qt.gnu_assembler">
 								<option id="gnu.both.asm.option.include.paths.1391102655" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/local/cuda-7.5/include"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu"/>
-									<listOptionValue builtIn="false" value="/home/martin/boost/boost_1_60_0"/>
-									<listOptionValue builtIn="false" value="/usr/include/boost"/>
 								</option>
+								<option id="gnu.both.asm.option.warnings.nowarn.743488337" name="Suppress warnings (-W)" superClass="gnu.both.asm.option.warnings.nowarn" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1774341135" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
@@ -73,14 +83,20 @@
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1252214910;cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979;ai3.tool.cuda_qt.c_compiler.883790437;cdt.managedbuild.tool.gnu.c.compiler.input.1414467194">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1252214910;cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979;cdt.managedbuild.tool.gnu.cpp.compiler.base.1820751108;cdt.managedbuild.tool.gnu.cpp.compiler.input.271784998">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1252214910;cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979;cdt.managedbuild.tool.gnu.c.compiler.base.600041672;cdt.managedbuild.tool.gnu.c.compiler.input.931566525">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1252214910;cdt.managedbuild.toolchain.gnu.base.1252214910.1322327979;ai3.tool.cuda_qt.cpp_compiler.652605527;ai3.tool.cuda_qt.cpp_compiler.input.1171523242">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

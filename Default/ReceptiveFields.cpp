@@ -29,7 +29,7 @@ void ReceptiveFields::createStep(double step){
 		}
 	}else{
 		Parallelize para();
-		std::vector<double> kernels = para.createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
+		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
 		for(int i = 0; i < kernels.size(); i++){
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
 		}
