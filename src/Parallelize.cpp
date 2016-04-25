@@ -16,15 +16,17 @@ Parallelize::~Parallelize() {
 	// TODO Auto-generated destructor stub
 }
 
-__global__
-void Parallelize::d_createKernel(double *center, double *step, double *width, double *kernel, int size){
+
+__global__ void d_createKernel(double *center, double *step, double *width, double *kernel, int size){
 	int i = threadIdx.x;
 	if(i < size)
 		*kernel = exp((-(((*center)-(*step))*((*center)-(*step)))/2)*(*width));
 }
 
 void Parallelize::d_createKernels(double *centers, double step, double width, double *kernelsArr){
-	  int N = sizeof(centers);
+	//std::cout << "step" << step << std::endl;
+	//std::cout << "width" << width << std::endl;
+	  int N = sizeof(centers)/sizeof(*centers);
 	  double stepArr[1], widthArr[1], *d_kernelCenter, *d_step, *d_kernelWidth, *d_kernel;
 
 
@@ -65,12 +67,14 @@ void Parallelize::d_createKernels(double *centers, double step, double width, do
 }
 
 std::vector<double> Parallelize::createKernels(std::vector<double> centers, double step, double width, int size){
-	double* centersArr = &centers[0];
-	double* kernelsArr = new double[size];
+	double centersArr[centers.size()];
+	std::copy(centers.begin(), centers.end(), centersArr);
+	double kernelsArr[size];
 	d_createKernels(centersArr, step, width, kernelsArr);
 	std::vector<double> returnVector;
-	for(int i = 0; i < sizeof(kernelsArr); i++){
+	for(int i = 0; i < size; i++){
 		returnVector.push_back(kernelsArr[i]);
 	}
+
 	return returnVector;
 }

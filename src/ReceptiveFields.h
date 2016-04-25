@@ -25,10 +25,11 @@ class ReceptiveFields {
 		//TODO: delete toString method when testing is done
 		virtual void createStep(double step);
 		virtual void applyDeltaRule();
-		
+		virtual void toString();
 		//Method is used to give one point in the learning trajectory
 		virtual void generateTarget(double input);
 	private:
+		Parallelize* para;
 		int kernelCreationCounter;
 		const int lowerLimit;
 		const int upperLimit;

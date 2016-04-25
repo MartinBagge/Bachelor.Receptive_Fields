@@ -18,15 +18,15 @@
 #include <math.h>
 #include <device_launch_parameters.h>
 #include <vector>
+#include <iostream>
 
 class Parallelize {
 	public:
-		Parallelize(){}
+		Parallelize();
 		~Parallelize();
 		std::vector<double> createKernels(std::vector<double> centers, double step, double width, int size);
 	private:
 		void d_createKernels(double *centers, double step, double width, double *kernelsArr);
-		__global__ void d_createKernel(double *center, double *step, double *width, double *kernel, int size);
 };
 #endif /* PARALLELIZE_H_ */
 

@@ -20,6 +20,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 	kernelCreationCounter = 0;
+	para = new Parallelize();
 }
 
 void ReceptiveFields::createStep(double step){
@@ -28,10 +29,11 @@ void ReceptiveFields::createStep(double step){
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp((-pow(((double)(kernelCenters1d[i]-step)),2)/2)*kernelWidth);
 		}
 	}else{
-		Parallelize para();
-		std::vector<double> kernels = para.createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
+		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
 		for(int i = 0; i < kernels.size(); i++){
+			std::cout << step << std::endl;
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
+			//std::cout << kernels[i] << std::endl;
 		}
 	}
 		kernelCreationCounter++;
@@ -85,4 +87,10 @@ std::vector<double> ReceptiveFields::linSpace(double start, double stop, double 
 		}
 	}
 	return returnVector;
+}
+
+void ReceptiveFields::toString(){
+	for (int i = 0; i < targetSize; i++){
+		std::cout << i << "  " << output1d[i] << "  " << targetPattern1d[i] << std::endl;
+	}
 }
