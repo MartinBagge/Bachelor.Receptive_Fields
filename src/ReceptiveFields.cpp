@@ -24,13 +24,10 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 }
 
 void ReceptiveFields::createStep(double step){
-	if(!use_gpu){
+	if(use_gpu){
 		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
-			for(int i = 0; i < kernels.size(); i++){
-				gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
-			}
-		for(int i = 0; i < numberOfKernels; i++){
-			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp((-pow(((double)(kernelCenters1d[i]-step)),2)/2)*kernelWidth);
+		for(int i = 0; i < kernels.size(); i++){
+			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
 		}
 	}else{
 		for(int i = 0; i < numberOfKernels; i++){
@@ -62,15 +59,19 @@ void ReceptiveFields::generateTarget(double input){
 void ReceptiveFields::applyDeltaRule(){
 	double value;
 	for(int k = 0; k < learningIterations; k++){
-		for(int i = 0; i < targetSize; i++){
-			value = 0;
-			for(int j = 0; j < numberOfKernels; j++){
-				value += gaussianKernels2d[(j*gaussianKernels2d[0]+1+i)]*weights1d[j];
+		if(use_gpu){
+			output1d = para->applyDeltaRule(learningRate, kernelCenters1d, targetPattern1d, weights1d, gaussianKernels2d);
+		}else{
+			for(int i = 0; i < targetSize; i++){
+				value = 0;
+				for(int j = 0; j < numberOfKernels; j++){
+					value += gaussianKernels2d[(j*gaussianKernels2d[0]+1+i)]*weights1d[j];
+				}
+				output1d[i]=value;
 			}
-			output1d[i]=value;
-		}
-		for(int l = 0; l < numberOfKernels; l++){
-			weights1d[l] += learningRate*((double)targetPattern1d[round(kernelCenters1d[l])]-(double)output1d[round(kernelCenters1d[l])]);
+			for(int l = 0; l < numberOfKernels; l++){
+				weights1d[l] += learningRate*((double)targetPattern1d[round(kernelCenters1d[l])]-(double)output1d[round(kernelCenters1d[l])]);
+			}
 		}
 	}
 }

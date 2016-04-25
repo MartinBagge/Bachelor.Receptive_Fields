@@ -17,7 +17,7 @@ int main(){
 	
 	cout << "Test" << endl;
 
-	ReceptiveFields RF(60, 120, 40, 0.1, 0.4, 50000, 85);
+	ReceptiveFields RF(60, 120, 40, 0.1, 0.4, 10, 85, true);
 	//Read data file
 	string inputString;
 	string token;
