@@ -17,6 +17,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
   weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu){
 	gaussianKernels2d[0] = targetSize;
 	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
+	outputsizeToCentersize = linSpace(1, targetSize, numberOfKernels);
 	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 	kernelCreationCounter = 0;
@@ -80,7 +81,7 @@ void ReceptiveFields::applyDeltaRule(){
 	double value;
 
 	if(use_gpu){
-		output1d = para->applyDeltaRule(learningRate, kernelCenters1d, targetPattern1d, weights1d, gaussianKernels2d, learningIterations);
+		output1d = para->applyDeltaRule(learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations);
 	}else{
 		for(int k = 0; k < learningIterations; k++){
 			for(int i = 0; i < targetSize; i++){
