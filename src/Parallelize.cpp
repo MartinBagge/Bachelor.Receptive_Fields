@@ -88,14 +88,11 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 __global__ void d_calcOutput(double *weights, double *kernels, double *output, int *loop, int *size, double *values){
 	int i = threadIdx.x;
 	if(i < size){
+		double value = 0;
 		for(int j = 0; j < loop; j++){
-			if(j == 0){
-				values[j] = kernels[((j*size+1)*i)]*weights[j];
-			}else{
-				values[j] = values[j-1]+kernels[((j*size+1)*i)]*weights[j];
-			}
+				value += kernels[((j*size+1)*i)]*weights[j];
 		}
-		output[i]=values[loop-1];
+		output[i]=value;
 	}
 }
 
