@@ -14,6 +14,7 @@
 #include <device_launch_parameters.h>
 #include <vector>
 #include <iostream>
+#include <stdio.h>
 
 class Parallelize {
 	public:

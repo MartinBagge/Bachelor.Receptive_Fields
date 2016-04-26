@@ -27,6 +27,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 //Creates a value in each kernel for every step
 void ReceptiveFields::createStep(double step){
 	if(use_gpu){
+		std::cout << "kernels with gpu" << std::endl;
 		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
 		for(int i = 0; i < kernels.size(); i++){
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
@@ -83,6 +84,7 @@ void ReceptiveFields::applyDeltaRule(){
 	if(use_gpu){
 		output1d = para->applyDeltaRule(learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations);
 	}else{
+		std::cout << "delta no gpu" << std::endl;
 		for(int k = 0; k < learningIterations; k++){
 			for(int i = 0; i < targetSize; i++){
 				value = 0;
@@ -92,7 +94,7 @@ void ReceptiveFields::applyDeltaRule(){
 				output1d[i]=value;
 			}
 			for(int l = 0; l < numberOfKernels; l++){
-				weights1d[l] += learningRate*((double)targetPattern1d[round(kernelCenters1d[l])]-(double)output1d[round(kernelCenters1d[l])]);
+				weights1d[l] += learningRate*((double)targetPattern1d[round(outputsizeToCentersize[l])]-(double)output1d[round(outputsizeToCentersize[l])]);
 			}
 		}
 	}
