@@ -23,6 +23,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	para = new Parallelize();
 }
 
+//Creates a value in each kernel for every step
 void ReceptiveFields::createStep(double step){
 	if(use_gpu){
 		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
@@ -37,6 +38,7 @@ void ReceptiveFields::createStep(double step){
 		kernelCreationCounter++;
 }
 
+//TODO: maybe this can be deleted
 std::vector<double> ReceptiveFields::zeros(int size){
 	std::vector<double> returnVector(size);
 	for(int i = 0; i < size; i++){
@@ -49,13 +51,31 @@ ReceptiveFields::~ReceptiveFields() {
 	// TODO Auto-generated destructor stub
 }
 
+//Used to generate kernel centers
+std::vector<double> ReceptiveFields::linSpace(double start, double stop, double space){
+	double addValue = (stop-start)/(space-1);
+	double tmp = start;
+	std::vector<double> returnVector(space);
+	for(int i = 0; i < space; i++){
+		if(i == 0){
+			returnVector[i] = start;
+		}else{
+			tmp += addValue;
+			returnVector[i] = tmp;
+		}
+	}
+	return returnVector;
+}
+
 
 //LEARNING
+//Generate target for supervised learning
 void ReceptiveFields::generateTarget(double input){
 	targetPattern1d[targetcount]=input;
 	targetcount++;
 }
 
+//applying simple learing rule
 void ReceptiveFields::applyDeltaRule(){
 	double value;
 
@@ -77,21 +97,7 @@ void ReceptiveFields::applyDeltaRule(){
 	}
 }
 
-std::vector<double> ReceptiveFields::linSpace(double start, double stop, double space){
-	double addValue = (stop-start)/(space-1);
-	double tmp = start;
-	std::vector<double> returnVector(space);
-	for(int i = 0; i < space; i++){
-		if(i == 0){
-			returnVector[i] = start;
-		}else{
-			tmp += addValue;
-			returnVector[i] = tmp;
-		}
-	}
-	return returnVector;
-}
-
+//TODO: debugging
 void ReceptiveFields::toString(){
 	for (int i = 0; i < targetSize; i++){
 		std::cout << i << "  " << output1d[i] << "  " << targetPattern1d[i] << std::endl;
