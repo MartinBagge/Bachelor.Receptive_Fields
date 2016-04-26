@@ -22,16 +22,13 @@ class Parallelize {
 		~Parallelize();
 		//GENERAL
 		//Call function to create "step" in kernel
-		std::vector<double> createKernels(std::vector<double> centers, double step, double width, int size);
+		std::vector<double> createKernels(std::vector<double> centers, double step, double width, int size, int numberOfBlocks);
 		//LEARNING
 		//function for simple supervised learning
-		std::vector<double> applyDeltaRule(double learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations);
+		std::vector<double> applyDeltaRule(double learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations, int numberOfBlocks);
 	private:
 		//prepare functions
-		void d_createKernels(double *centers, double step, double width, double *kernelsArr, int centerSize, int kernelSize);
-		//learning
-		void calcOutput(double *weights, double *kernels, double *output, int centerSize, int targetSize, int kernelSize);
-		void updateWeights(double learningRateValue, double *centers, double *target, double *output, double *weights, int centerSize, int targetSize);
+		void d_createKernels(double *centers, double step, double width, double *kernelsArr, int centerSize, int kernelSize, int numberOfBlocks);
 };
 #endif /* PARALLELIZE_H_ */
 

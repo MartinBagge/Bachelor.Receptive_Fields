@@ -10,11 +10,11 @@
 
 
 ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels,
-		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu)
+		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu, int numberOfGpuBlocks)
 : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth),
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
-  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu){
+  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu), numberOfGpuBlocks(numberOfGpuBlocks){
 	gaussianKernels2d[0] = targetSize;
 	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
 	outputsizeToCentersize = linSpace(1, targetSize, numberOfKernels);
@@ -27,8 +27,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 //Creates a value in each kernel for every step
 void ReceptiveFields::createStep(double step){
 	if(use_gpu){
-		std::cout << "kernels with gpu" << std::endl;
-		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels);
+		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels, numberOfGpuBlocks);
 		for(int i = 0; i < kernels.size(); i++){
 			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
 		}
@@ -82,9 +81,8 @@ void ReceptiveFields::applyDeltaRule(){
 	double value;
 
 	if(use_gpu){
-		output1d = para->applyDeltaRule(learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations);
+		output1d = para->applyDeltaRule(learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations, numberOfGpuBlocks);
 	}else{
-		std::cout << "delta no gpu" << std::endl;
 		for(int k = 0; k < learningIterations; k++){
 			for(int i = 0; i < targetSize; i++){
 				value = 0;
