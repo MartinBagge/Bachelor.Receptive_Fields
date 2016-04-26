@@ -54,7 +54,7 @@ class ReceptiveFields {
 		virtual std::vector<double> zeros(int size);
 		
 		//Properties for learning
-		std::vector<double> OutputsizeToCentersize;
+		std::vector<double> outputsizeToCentersize;
 		std::vector<double> alfa1d;
 		std::vector<double> weights1d;
 		std::vector<double> targetPattern1d;
