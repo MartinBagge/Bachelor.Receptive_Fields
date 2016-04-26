@@ -16,13 +16,15 @@ Parallelize::~Parallelize() {
 	// TODO Auto-generated destructor stub
 }
 
-
+//GENEREL KERNEL CREATION
+//kernel function runs on gpu
 __global__ void d_createKernel(double *center, double *step, double *width, double *kernel, int size){
 	int i = threadIdx.x;
 	if(i < size)
 		kernel[i] = exp((-(((center[i])-(step[i]))*((center[i])-(step[i])))/2)*(width[i]));
 }
 
+//prepare function(runs on CPU prepares GPU)
 void Parallelize::d_createKernels(double *centers, double step, double width, double *kernelsArr, int centerSize, int kernelSize){
 	//std::cout << "step" << step << std::endl;
 	//std::cout << "width" << width << std::endl;
@@ -61,6 +63,7 @@ void Parallelize::d_createKernels(double *centers, double step, double width, do
 
 }
 
+//Public method to be called from outside
 std::vector<double> Parallelize::createKernels(std::vector<double> centers, double step, double width, int size){
 	double centersArr[centers.size()];
 	std::copy(centers.begin(), centers.end(), centersArr);
@@ -74,6 +77,10 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 	return returnVector;
 }
 
+
+//SIMPLE LEARNING
+
+//kernel function
 __global__ void d_calcOutput(double *weights, double *kernels, double *output, int loop, int size, double *values){
 	int i = threadIdx.x;
 	if(i < size){
@@ -88,6 +95,7 @@ __global__ void d_calcOutput(double *weights, double *kernels, double *output, i
 	}
 }
 
+//prepare function
 void Parallelize::calcOutput(double *weights, double *kernels, double *output, int centerSize, int targetSize, int kernelSize){
 	  double values[targetSize], *d_values, *d_weights, *d_output, *d_kernels;
 
@@ -122,6 +130,7 @@ void Parallelize::calcOutput(double *weights, double *kernels, double *output, i
 	  cudaFree(d_values);
 }
 
+//Kernel function
 __global__ void d_updateWeights(double learningRate, double *centers, double *target, double *output, double *weights, int size){
 	int i = threadIdx.x;
 	if(i < size){
@@ -129,6 +138,7 @@ __global__ void d_updateWeights(double learningRate, double *centers, double *ta
 	}
 }
 
+//prepare function
 void Parallelize::updateWeights(double learningRate, double *centers, double *target, double *output, double *weights, int centerSize, int targetSize){
 	  double *d_centers, *d_target, *d_output, *d_weights;
 
@@ -170,6 +180,7 @@ void Parallelize::updateWeights(double learningRate, double *centers, double *ta
 
 }
 
+//public function to apply learning
 std::vector<double> Parallelize::applyDeltaRule(double learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations){
 	std::vector<double> finalOutput(target.size());
 	double centersArr[centers.size()];
