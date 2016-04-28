@@ -87,7 +87,7 @@ void ReceptiveFields::applyDeltaRule(){
 	double value;
 
 	if(use_gpu){
-		output1d = para->applyDeltaRule(learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations, numberOfGpuBlocks);
+		output1d = para->applyDeltaRule((float)learningRate, outputsizeToCentersize, targetPattern1d, weights1d, gaussianKernels2d, learningIterations, numberOfGpuBlocks);
 	}else{
 		for(int k = 0; k < learningIterations; k++){
 			for(int i = 0; i < targetSize; i++){

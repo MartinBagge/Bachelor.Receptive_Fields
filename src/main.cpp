@@ -16,13 +16,13 @@ TEST(Re){
 
 int main(){
 	int iterations = 500000;
-	bool gpu = false;
-	int kernels[]={20, 40, 60, 85};
-	int blocks[]={1, 5, 10, 50, 86, 100, 200};
+	bool gpu = true;
+	//int kernels[]={20, 40, 60, 85};
+	//int blocks[]={1, 5, 10, 50, 86, 100, 200};
 	//for(int i = 0; i < sizeof(blocks)/sizeof(blocks[0]); i++){
-		for (int j = 0; j < sizeof(kernels)/sizeof(kernels[0]); j++){
-			std::cout/* << "blocks: " << blocks[i] */<< "     kernels: " << kernels[j] << std::endl;
-			ReceptiveFields RF(60, 120, kernels[j], 0.1, 0.4, iterations, 85, gpu, 0);
+		//for (int j = 0; j < sizeof(kernels)/sizeof(kernels[0]); j++){
+			//std::cout/* << "blocks: " << blocks[i] */<< "     kernels: " << kernels[j] << std::endl;
+			ReceptiveFields RF(60, 120, 40, 0.1, 0.4, iterations, 85, gpu, 86);
 			string inputString;
 			string token;
 			vector<string> splitStrings;
@@ -44,8 +44,8 @@ int main(){
 				RF.applyDeltaRule();
 				std::cout << "Time: " << ((double)(clock()-tstart)/CLOCKS_PER_SEC) << std::endl;
 			//}
-		}
+		//}
 	//}
-	//RF.toString();
+	RF.toString();
 	return 0;
 }
