@@ -29,10 +29,8 @@ void Parallelize::d_createKernels(double *centers, double step, double width, do
 	//std::cout << "width" << width << std::endl;
 	  double*d_kernelCenter,*d_kernel;
 
-
 	  cudaMalloc((void**)&d_kernelCenter, centerSize*sizeof(double));
 	  cudaMalloc((void**)&d_kernel, centerSize*sizeof(double));
-
 
 	  for(int i = 0; i < centerSize; i++){
 		  kernelsArr[i] = 0;
@@ -43,7 +41,6 @@ void Parallelize::d_createKernels(double *centers, double step, double width, do
 
 	  //function call
 	  d_createKernel<<<numberOfBlocks,ceil(centerSize/numberOfBlocks)>>>(d_kernelCenter, step, width, d_kernel, centerSize);
-
 	  cudaDeviceSynchronize();
 
 	  cudaMemcpy(kernelsArr, d_kernel, centerSize*sizeof(double), cudaMemcpyDeviceToHost);
@@ -70,10 +67,7 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 
 //SIMPLE LEARNING
 
-//kernel function
-
-
-//prepare function
+//kernel functions
 
 __global__ void d_calcOutput(double *weights, double *kernels, double *output, int centerSize, int targetSize){
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
@@ -93,6 +87,8 @@ __global__ void d_updateWeights(double learningRate, double *centers, double *ta
 	}
 }
 
+
+//prepare function
 void d_deltarule(double learningRate, double *centers, double *target, double *output, double *weights, double *kernels, int centerSize, int targetSize, int kernelSize, int iterations, int numberOfBlocks){
 	double *d_centers, *d_target, *d_output, *d_weights, *d_kernels;
 
@@ -111,20 +107,17 @@ void d_deltarule(double learningRate, double *centers, double *target, double *o
 	for(int i = 0; i < iterations; i++){
 
 		d_calcOutput<<<numberOfBlocks,ceil(targetSize/numberOfBlocks)>>>(d_weights, d_kernels, d_output, centerSize, targetSize);
-
 		cudaDeviceSynchronize();
 
 		if(i != iterations-1){
 
 			d_updateWeights<<<numberOfBlocks,ceil(centerSize/numberOfBlocks)>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
-
 			cudaDeviceSynchronize();
 
 		}
 	}
 
 	cudaMemcpy(output, d_output, targetSize*sizeof(double), cudaMemcpyDeviceToHost);
-
 
 	cudaFree(d_centers);
 	cudaFree(d_target);

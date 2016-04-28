@@ -10,18 +10,27 @@
 
 
 ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels,
-		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu, int numberOfGpuBlocks)
+		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu, int blocks)
 : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth),
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
-  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu), numberOfGpuBlocks(numberOfGpuBlocks){
+  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu){
 	gaussianKernels2d[0] = targetSize;
 	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
 	outputsizeToCentersize = linSpace(1, targetSize, numberOfKernels);
-	weights1d = zeros(numberOfKernels);
 	targetcount = 0;
 	kernelCreationCounter = 0;
-	para = new Parallelize();
+	if(use_gpu){
+		/*
+		if(targetSize < 65535){
+			numberOfGpuBlocks = targetSize+1;
+		}else{
+			numberOfGpuBlocks = 65535;
+		}
+		*/
+		numberOfGpuBlocks = blocks;
+		para = new Parallelize();
+	}
 }
 
 //Creates a value in each kernel for every step
@@ -39,17 +48,14 @@ void ReceptiveFields::createStep(double step){
 		kernelCreationCounter++;
 }
 
-//TODO: maybe this can be deleted
-std::vector<double> ReceptiveFields::zeros(int size){
-	std::vector<double> returnVector(size);
-	for(int i = 0; i < size; i++){
-		returnVector[i] = 0;
-	}
-	return returnVector;
-}
-
 ReceptiveFields::~ReceptiveFields() {
-	// TODO Auto-generated destructor stub
+	gaussianKernels2d.clear();
+	kernelCenters1d.clear();
+	output1d.clear();
+	outputsizeToCentersize.clear();
+	alfa1d.clear();
+	weights1d.clear();
+	targetPattern1d.clear();
 }
 
 //Used to generate kernel centers
