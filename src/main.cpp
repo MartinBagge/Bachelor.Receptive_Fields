@@ -14,7 +14,7 @@ TEST(Re){
 }
 */
 
-ReceptiveFields createReceptiveFields(string inputName, int iterations, bool gpu, int &size){
+ReceptiveFields createReceptiveFields(string inputName, int kernels, double width, double learningRate, int iterations, bool gpu, int &size){
 	string token;
 	vector<string> splitStrings;
 	ifstream filein;
@@ -22,8 +22,9 @@ ReceptiveFields createReceptiveFields(string inputName, int iterations, bool gpu
 	while(getline(filein, token, ',')){
 		splitStrings.push_back(token);
 	}
-	ReceptiveFields RF(0, 0, 25, 2, 0.4, iterations, splitStrings.size(), gpu);
+	ReceptiveFields RF(0, 0, kernels, width, learningRate, iterations, splitStrings.size(), gpu);
 	size = splitStrings.size();
+	cout << size << endl;
 	for(int i = 0; i < splitStrings.size(); i++){
 		RF.generateTarget(atof(splitStrings[i].c_str()));
 	}
@@ -39,10 +40,10 @@ int main(){
 	int size_leftknee = 0;
 	int size_rightknee = 0;
 
-	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle", iterations, gpu, size_lefthip);
-	ReceptiveFields righthip = createReceptiveFields("runbot_righthip_cycle", iterations, gpu, size_righthip);
-	ReceptiveFields leftknee = createReceptiveFields("runbot_leftknee_cycle", iterations, gpu, size_leftknee);
-	ReceptiveFields rightknee = createReceptiveFields("runbot_rightknee_cycle", iterations, gpu, size_rightknee);
+	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle", 500, 0.0045, 0.4, iterations, gpu, size_lefthip);
+	ReceptiveFields righthip = createReceptiveFields("runbot_righthip_cycle", 500, 0.0045, 0.4, iterations, gpu, size_righthip);
+	ReceptiveFields leftknee = createReceptiveFields("runbot_leftknee_cycle", 500, 0.0045, 0.4, iterations, gpu, size_leftknee);
+	ReceptiveFields rightknee = createReceptiveFields("runbot_rightknee_cycle", 500, 0.0045, 0.4, iterations, gpu, size_rightknee);
 
 	int tmp_lefthip = 1;
 	int tmp_righthip = 1;
