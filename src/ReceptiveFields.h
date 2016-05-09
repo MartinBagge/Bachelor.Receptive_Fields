@@ -30,7 +30,7 @@ class ReceptiveFields {
 		//Call when all steps are added to apply learning
 		virtual void applyDeltaRule();
 		//TODO: debugging
-		virtual void toString();
+		virtual void toString(std::string filename);
 		//Method is used to give one point in the learning trajectory
 		virtual void generateTarget(double input);
 		

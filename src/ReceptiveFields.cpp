@@ -102,16 +102,14 @@ void ReceptiveFields::applyDeltaRule(){
 }
 
 //TODO: debugging
-void ReceptiveFields::toString(){
+void ReceptiveFields::toString(std::string filename){
 	for (int i = 0; i < targetSize; i++){
 		std::cout << i << "  " << output1d[i] << "  " << targetPattern1d[i] << std::endl;
 	}
-
 	std::ofstream file;
-		file.open("output_target_real.csv");
-		for (int i = 0; i < targetSize; i++){
-			file << i << "," << output1d[i] << "," << targetPattern1d[i] << "\n";
-		}
-
+	file.open(filename.c_str());
+	for (int i = 0; i < targetSize; i++){
+		file << i << "," << output1d[i] << "," << targetPattern1d[i] << "\n";
+	}
 
 }
