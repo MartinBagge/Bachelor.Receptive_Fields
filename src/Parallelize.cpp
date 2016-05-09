@@ -20,10 +20,9 @@ Parallelize::~Parallelize() {
 __global__ void d_createKernel(float *center, float step, float width, float *kernel, int size){
 
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
-	if(i > size)
-		printf("kernel, threadI %d, blockid %d, blockdim %d\n", threadIdx.x, blockIdx.x, blockDim.x);
+		//printf("kernel, threadI %d, blockid %d, blockdim %d\n", threadIdx.x, blockIdx.x, blockDim.x);
 	if(i < size)
-		kernel[i] = exp((-((((center[i])-(step))*((center[i])-(step)))/2)*(width)));
+		kernel[i] = exp((-(((center[i])-(step))*((center[i])-(step))))/(2*(width*width)));
 }
 
 //prepare function(runs on CPU prepares GPU)
@@ -44,7 +43,8 @@ void Parallelize::d_createKernels(float *centers, float step, float width, float
 	  cudaMemcpy(d_kernel, kernelsArr, centerSize*sizeof(float), cudaMemcpyHostToDevice);
 
 	  //function call
-	  d_createKernel<<<1,centerSize>>>(d_kernelCenter, step, width, d_kernel, centerSize);
+	  d_createKernel<<<numberOfBlocks,((int)(centerSize/numberOfBlocks))+1>>>(d_kernelCenter, step, width, d_kernel, centerSize);
+	  //d_createKernel<<<1, 20>>>(d_kernelCenter, step, width, d_kernel, centerSize);
 	  cudaDeviceSynchronize();
 
 	  cudaMemcpy(kernelsArr, d_kernel, centerSize*sizeof(float), cudaMemcpyDeviceToHost);
@@ -79,8 +79,7 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 
 __global__ void d_calcOutput(float *weights, float *kernels, float *output, int centerSize, int targetSize){
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
-	if(i > targetSize)
-			printf("output, threadI %d, blockid %d, blockdim %d\n", threadIdx.x, blockIdx.x, blockDim.x);
+			//printf("output, threadI %d, blockid %d, blockdim %d\n", threadIdx.x, blockIdx.x, blockDim.x);
 	if(i < targetSize){
 		float value = 0;
 		for(int j = 0; j < centerSize; j++){
@@ -92,8 +91,7 @@ __global__ void d_calcOutput(float *weights, float *kernels, float *output, int 
 
 __global__ void d_updateWeights(float learningRate, float *centers, float *target, float *output, float *weights, int size){
 	int i = threadIdx.x + blockIdx.x * blockDim.x;
-	if(i > size)
-		printf("weight, threadI %d, blockid %d, blockdim %d, size %d \n", threadIdx.x, blockIdx.x, blockDim.x, size);
+		//printf("weight, threadI %d, blockid %d, blockdim %d, size %d \n", threadIdx.x, blockIdx.x, blockDim.x, size);
 	if(i < size){
 		weights[i] = weights[i]+(learningRate*((float)target[lround(centers[i])]-(float)output[lround(centers[i])]));
 	}
@@ -104,7 +102,7 @@ __global__ void d_updateWeights(float learningRate, float *centers, float *targe
 void d_deltarule(float learningRate, float *centers, float *target, float *output, float *weights, float *kernels, int centerSize, int targetSize, int kernelSize, int iterations, int numberOfBlocks){
 	float *d_centers, *d_target, *d_output, *d_weights, *d_kernels;
 
-	std::cout << learningRate << "     " << targetSize << "     " << centerSize << "     " << kernelSize<< "     " << iterations << std::endl;
+	//std::cout << learningRate << "     " << targetSize << "     " << centerSize << "     " << kernelSize<< "     " << iterations << std::endl;
 
 	cudaMalloc((void**)&d_centers, centerSize*sizeof(float));
 	cudaMalloc((void**)&d_target, targetSize*sizeof(float));
@@ -117,17 +115,17 @@ void d_deltarule(float learningRate, float *centers, float *target, float *outpu
 	cudaMemcpy(d_output, output, targetSize*sizeof(float), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_weights, weights, centerSize*sizeof(float), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_kernels, kernels, kernelSize*sizeof(float), cudaMemcpyHostToDevice);
-	std::cout << "before iterations:" << iterations << std::endl;
+	//std::cout << "before iterations:" << iterations << std::endl;
 	for(int i = 0; i < iterations; i++){
 		//std::cout << "in iteration: " << i << std::endl;
-		d_calcOutput<<<1, targetSize>>>(d_weights, d_kernels, d_output, centerSize, targetSize);
-		//d_calcOutput <<<1, targetSize>>>(d_weights, d_kernels, d_output, centerSize, targetSize);
+		d_calcOutput<<<numberOfBlocks,((int)(targetSize/numberOfBlocks))+1>>>(d_weights, d_kernels, d_output, centerSize, targetSize);
+		//d_calcOutput<<<1, 85>>>(d_weights, d_kernels, d_output, centerSize, targetSize);
 		cudaDeviceSynchronize();
 
 		if(i != iterations-1){
 
-			d_updateWeights<<<1, centerSize>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
-			//d_updateWeights<<<1,centerSize>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
+			d_updateWeights<<<numberOfBlocks,((int)(centerSize/numberOfBlocks))+1>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
+			//d_updateWeights<<<1, 20>>>(learningRate, d_centers, d_target, d_output, d_weights, centerSize);
 			cudaDeviceSynchronize();
 
 		}
@@ -175,7 +173,7 @@ std::vector<double> Parallelize::applyDeltaRule(float learningRate, std::vector<
 		outputArr[i] = 0;
 	}
 
-	d_deltarule(learningRate, centersArr, targetArr, outputArr, weightsArr, kernelsArr, centers.size(), target.size(), kernels.size(), learningIterations, (short int)numberOfBlocks);
+	d_deltarule(learningRate, centersArr, targetArr, outputArr, weightsArr, kernelsArr, centers.size(), target.size(), kernels.size(), learningIterations, numberOfBlocks);
 
 	std::vector<double> finalOutput(outputArr, outputArr+target.size());
 

@@ -15,37 +15,41 @@ TEST(Re){
 */
 
 int main(){
-	int iterations = 500000;
+	int iterations = 50000;
 	bool gpu = true;
-	//int kernels[]={20, 40, 60, 85};
-	//int blocks[]={1, 5, 10, 50, 86, 100, 200};
-	//for(int i = 0; i < sizeof(blocks)/sizeof(blocks[0]); i++){
-		//for (int j = 0; j < sizeof(kernels)/sizeof(kernels[0]); j++){
-			//std::cout/* << "blocks: " << blocks[i] */<< "     kernels: " << kernels[j] << std::endl;
-			ReceptiveFields RF(60, 120, 40, 0.1, 0.4, iterations, 85, gpu, 86);
+	int targetSize = 85;
+			ReceptiveFields RF(60, 120, 20, 4, 0.4, iterations, targetSize, gpu);
 			string inputString;
 			string token;
 			vector<string> splitStrings;
 			ifstream filein;
 			filein.open("runbot_leftknee_output.log");
+			/*
+			while(getline(filein,inputString)){
+			 		stringstream lineStream(inputString);
+			 		splitStrings.clear();
+			 		while(getline(lineStream, token, ',')){
+			 			splitStrings.push_back(token);
+			 		}
+			 		RF.generateTarget(atof(splitStrings[8].c_str()));
+			 	}*/
 			while(getline(filein, token, ',')){
 				splitStrings.push_back(token);
 			}
 			for(int i = 0; i < splitStrings.size(); i++){
 				RF.generateTarget(atof(splitStrings[i].c_str()));
 			}
-			//for (int i = 0; i < 10; i++){
 				clock_t tstart = clock();
 				int tmp = 1;
-				for(int i = 0; i < 85; i++){
+				for(int i = 0; i < targetSize; i++){
 					RF.createStep(tmp);
 					tmp++;
 				}
 				RF.applyDeltaRule();
-				std::cout << "Time: " << ((double)(clock()-tstart)/CLOCKS_PER_SEC) << std::endl;
-			//}
-		//}
-	//}
-	RF.toString();
+				double time = ((double)(clock()-tstart)/CLOCKS_PER_SEC);
+
+				RF.toString();
+				std::cout << "Time: " << time << std::endl;
+
 	return 0;
 }
