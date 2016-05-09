@@ -33,26 +33,14 @@ ReceptiveFields createReceptiveFields(string inputName, int iterations, bool gpu
 }
 
 int main(){
-	int iterations = 500000;
+	int iterations = 50000;
 	bool gpu = true;
 	//int kernels[]={20, 40, 60, 85};
 	//int blocks[]={1, 5, 10, 50, 86, 100, 200};
 	//for(int i = 0; i < sizeof(blocks)/sizeof(blocks[0]); i++){
 		//for (int j = 0; j < sizeof(kernels)/sizeof(kernels[0]); j++){
 			//std::cout/* << "blocks: " << blocks[i] */<< "     kernels: " << kernels[j] << std::endl;
-	/*
-			string token;
-			vector<string> splitStrings;
-			ifstream filein;
-			filein.open("runbot_leftknee_output.log");
-			while(getline(filein, token, ',')){
-				splitStrings.push_back(token);
-			}
-			ReceptiveFields RF(60, 120, 40, 0.1, 0.4, iterations, splitStrings.size(), gpu);
-			for(int i = 0; i < splitStrings.size(); i++){
-				RF.generateTarget(atof(splitStrings[i].c_str()));
-			}
-			*/
+
 	int size = 0;
 	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle", iterations, gpu, size);
 			//for (int i = 0; i < 10; i++){

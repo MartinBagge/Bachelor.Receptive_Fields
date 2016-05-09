@@ -39,7 +39,7 @@ void ReceptiveFields::createStep(double step){
 		}
 	}else{
 		for(int i = 0; i < numberOfKernels; i++){
-			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp((-pow(((double)(kernelCenters1d[i]-step)),2)/2)*kernelWidth);
+			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp(-pow(((double)(kernelCenters1d[i]-step)),2)/(2*(kernelWidth*kernelWidth)));
 		}
 	}
 		kernelCreationCounter++;
@@ -106,4 +106,12 @@ void ReceptiveFields::toString(){
 	for (int i = 0; i < targetSize; i++){
 		std::cout << i << "  " << output1d[i] << "  " << targetPattern1d[i] << std::endl;
 	}
+
+	std::ofstream file;
+		file.open("output_target_real.csv");
+		for (int i = 0; i < targetSize; i++){
+			file << i << "," << output1d[i] << "," << targetPattern1d[i] << "\n";
+		}
+
+
 }
