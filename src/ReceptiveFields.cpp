@@ -10,7 +10,7 @@
 
 
 ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels,
-		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu, int blocks)
+		const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize, bool use_gpu)
 : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth),
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
@@ -21,14 +21,11 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 	targetcount = 0;
 	kernelCreationCounter = 0;
 	if(use_gpu){
-		/*
 		if(targetSize < 65535){
 			numberOfGpuBlocks = targetSize+1;
 		}else{
 			numberOfGpuBlocks = 65535;
 		}
-		*/
-		numberOfGpuBlocks = blocks;
 		para = new Parallelize();
 	}
 }

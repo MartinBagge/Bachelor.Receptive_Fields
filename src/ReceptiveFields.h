@@ -22,7 +22,7 @@ class ReceptiveFields {
 		//FUNCTIONS
 		
 		//if use_gpu is set to true a nvidia gpu must be present in the system setup as this is required
-		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize,  bool use_gpu, int blocks);
+		ReceptiveFields(const int lowerLimit, const int upperLimit, const int numberOfKernels, const double kernelWidth, const double learningRate, const int learningIterations, const int targetSize,  bool use_gpu);
 
 		~ReceptiveFields();
 		//Used to create a value in each kernel

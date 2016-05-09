@@ -14,6 +14,24 @@ TEST(Re){
 }
 */
 
+ReceptiveFields createReceptiveFields(string inputName, int iterations, bool gpu, int &size){
+	string token;
+	vector<string> splitStrings;
+	ifstream filein;
+	filein.open(inputName.c_str());
+	while(getline(filein, token, ',')){
+		splitStrings.push_back(token);
+	}
+	ReceptiveFields RF(60, 120, 25, 1, 0.4, iterations, splitStrings.size(), gpu);
+	size = splitStrings.size();
+	for(int i = 0; i < splitStrings.size(); i++){
+		RF.generateTarget(atof(splitStrings[i].c_str()));
+	}
+
+	return RF;
+
+}
+
 int main(){
 	int iterations = 500000;
 	bool gpu = true;
@@ -22,8 +40,7 @@ int main(){
 	//for(int i = 0; i < sizeof(blocks)/sizeof(blocks[0]); i++){
 		//for (int j = 0; j < sizeof(kernels)/sizeof(kernels[0]); j++){
 			//std::cout/* << "blocks: " << blocks[i] */<< "     kernels: " << kernels[j] << std::endl;
-			ReceptiveFields RF(60, 120, 40, 0.1, 0.4, iterations, 85, gpu, 86);
-			string inputString;
+	/*
 			string token;
 			vector<string> splitStrings;
 			ifstream filein;
@@ -31,21 +48,27 @@ int main(){
 			while(getline(filein, token, ',')){
 				splitStrings.push_back(token);
 			}
+			ReceptiveFields RF(60, 120, 40, 0.1, 0.4, iterations, splitStrings.size(), gpu);
 			for(int i = 0; i < splitStrings.size(); i++){
 				RF.generateTarget(atof(splitStrings[i].c_str()));
 			}
+			*/
+	int size = 0;
+	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle", iterations, gpu, size);
 			//for (int i = 0; i < 10; i++){
 				clock_t tstart = clock();
 				int tmp = 1;
-				for(int i = 0; i < 85; i++){
-					RF.createStep(tmp);
+				for(int i = 0; i < size; i++){
+					lefthip.createStep(tmp);
 					tmp++;
 				}
-				RF.applyDeltaRule();
+				lefthip.applyDeltaRule();
 				std::cout << "Time: " << ((double)(clock()-tstart)/CLOCKS_PER_SEC) << std::endl;
 			//}
 		//}
 	//}
-	RF.toString();
+	lefthip.toString();
 	return 0;
 }
+
+
