@@ -14,7 +14,7 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 : lowerLimit(lowerLimit), upperLimit(upperLimit), numberOfKernels(numberOfKernels), kernelWidth(kernelWidth),
   learningRate(learningRate), learningIterations(learningIterations), targetSize(targetSize),
   gaussianKernels2d(numberOfKernels*targetSize+1), kernelCenters1d(numberOfKernels), alfa1d(targetSize),
-  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu){
+  weights1d(numberOfKernels), targetPattern1d(targetSize), output1d(targetSize), use_gpu(use_gpu), input1d(targetSize){
 	gaussianKernels2d[0] = targetSize;
 	kernelCenters1d = linSpace(1, targetSize, numberOfKernels);
 	outputsizeToCentersize = linSpace(1, targetSize, numberOfKernels);
@@ -32,17 +32,21 @@ ReceptiveFields::ReceptiveFields(const int lowerLimit, const int upperLimit, con
 
 //Creates a value in each kernel for every step
 void ReceptiveFields::createStep(double step){
-	if(use_gpu){
-		std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels, numberOfGpuBlocks);
-		for(int i = 0; i < kernels.size(); i++){
-			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
+	if(step >= lowerLimit && step <= upperLimit){
+		if(use_gpu){
+			std::vector<double> kernels = para->createKernels(kernelCenters1d, step, kernelWidth, numberOfKernels, numberOfGpuBlocks);
+			for(int i = 0; i < kernels.size(); i++){
+				gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = kernels[i];
+			}
+
+		}else{
+			for(int i = 0; i < numberOfKernels; i++){
+				gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp(-pow(((double)(kernelCenters1d[i]-step)),2)/(2*(kernelWidth*kernelWidth)));
+			}
 		}
-	}else{
-		for(int i = 0; i < numberOfKernels; i++){
-			gaussianKernels2d[kernelCreationCounter+i*gaussianKernels2d[0]+1] = exp(-pow(((double)(kernelCenters1d[i]-step)),2)/(2*(kernelWidth*kernelWidth)));
-		}
-	}
+		input1d[kernelCreationCounter] = step;
 		kernelCreationCounter++;
+	}
 }
 
 ReceptiveFields::~ReceptiveFields() {
@@ -99,6 +103,19 @@ void ReceptiveFields::applyDeltaRule(){
 			}
 		}
 	}
+}
+
+std::vector<double> ReceptiveFields::getOutputs(){
+	return output1d;
+}
+
+double ReceptiveFields::getSpecifiedOutput(double input){
+	for(int i = 0; i < targetSize; i++){
+		if(input == input1d[i]){
+			return output1d[i];
+		}
+	}
+	return 0.0;
 }
 
 //TODO: debugging

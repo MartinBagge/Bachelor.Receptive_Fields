@@ -14,10 +14,10 @@ figure('name','Target trajectory')
 hold on
 plot(yt,'r')
 
-n=100; %number of Gaussian kernels
-s=0.05; %width of Gaussian kernels
+n=5000; %number of Gaussian kernels
+s=0.5; %width of Gaussian kernels
 w=zeros(1,n);%initial weights
-lr=0.2; %learning rates
+lr=2; %learning rates
 M=20000; %number of iterations for learning
 
 lower_limit=45;%joint angle limits

@@ -51,7 +51,10 @@ class ReceptiveFields {
 		std::vector<double> gaussianKernels2d;
 		std::vector<double> kernelCenters1d;
 		std::vector<double> output1d;
+		std::vector<double> input1d;
 		virtual std::vector<double> linSpace(double start, double stop, double space);
+		virtual std::vector<double> getOutputs();
+		virtual double getSpecifiedOutput(double input);
 		
 		//Properties for learning
 		std::vector<double> outputsizeToCentersize;

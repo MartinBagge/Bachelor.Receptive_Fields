@@ -8,7 +8,7 @@
 #include "Parallelize.h"
 
 Parallelize::Parallelize() {
-
+	cudaDeviceReset();
 }
 
 Parallelize::~Parallelize() {
@@ -52,8 +52,6 @@ void Parallelize::d_createKernels(float *centers, float step, float width, float
 	  cudaFree(d_kernelCenter);
 	  cudaFree(d_kernel);
 
-
-
 }
 
 //Public method to be called from outside
@@ -65,6 +63,7 @@ std::vector<double> Parallelize::createKernels(std::vector<double> centers, doub
 	//std::copy(centers.begin(), centers.end(), centersArr);
 	float kernelsArr[size];
 	d_createKernels(centersArr, step, width, kernelsArr, centers.size(), size, numberOfBlocks);
+	cudaDeviceReset();
 	std::vector<double> returnVector;
 	for(int i = 0; i < size; i++){
 		returnVector.push_back(kernelsArr[i]);
@@ -172,9 +171,8 @@ std::vector<double> Parallelize::applyDeltaRule(float learningRate, std::vector<
 	for(int i = 0; i < target.size(); i++){
 		outputArr[i] = 0;
 	}
-
 	d_deltarule(learningRate, centersArr, targetArr, outputArr, weightsArr, kernelsArr, centers.size(), target.size(), kernels.size(), learningIterations, numberOfBlocks);
-
+	cudaDeviceReset();
 	std::vector<double> finalOutput(outputArr, outputArr+target.size());
 
 	return finalOutput;

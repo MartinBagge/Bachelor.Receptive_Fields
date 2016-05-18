@@ -22,7 +22,7 @@ ReceptiveFields createReceptiveFields(string inputName, int kernels, double widt
 	while(getline(filein, token, ',')){
 		splitStrings.push_back(token);
 	}
-	ReceptiveFields RF(0, 0, kernels, width, learningRate, iterations, splitStrings.size(), gpu);
+	ReceptiveFields RF(1, splitStrings.size(), kernels, width, learningRate, iterations, splitStrings.size(), gpu);
 	size = splitStrings.size();
 	cout << size << endl;
 	for(int i = 0; i < splitStrings.size(); i++){
@@ -39,20 +39,25 @@ int main(){
 	int size_righthip = 0;
 	int size_leftknee = 0;
 	int size_rightknee = 0;
-
-	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle", 500, 0.0045, 0.4, iterations, gpu, size_lefthip);
-	ReceptiveFields righthip = createReceptiveFields("runbot_righthip_cycle", 500, 0.0045, 0.4, iterations, gpu, size_righthip);
-	ReceptiveFields leftknee = createReceptiveFields("runbot_leftknee_cycle", 500, 0.0045, 0.4, iterations, gpu, size_leftknee);
-	ReceptiveFields rightknee = createReceptiveFields("runbot_rightknee_cycle", 500, 0.0045, 0.4, iterations, gpu, size_rightknee);
-
+	int kernels = 500;
 	int tmp_lefthip = 1;
 	int tmp_righthip = 1;
 	int tmp_leftknee = 1;
 	int tmp_rightknee = 1;
+
+	double width = 0.3;
+	ReceptiveFields lefthip = createReceptiveFields("runbot_lefthip_cycle_interp.csv", kernels, width, 0.1, iterations, gpu, size_lefthip);
+	ReceptiveFields righthip = createReceptiveFields("runbot_righthip_cycle_interp.csv", kernels, width, 0.1, iterations, gpu, size_righthip);
+	ReceptiveFields leftknee = createReceptiveFields("runbot_leftknee_cycle_interp.csv", kernels, width, 0.1, iterations, gpu, size_leftknee);
+	ReceptiveFields rightknee = createReceptiveFields("runbot_rightknee_cycle_interp.csv", kernels, width, 0.1, iterations, gpu, size_rightknee);
+
+	clock_t tstart = clock();
+
 	for(int i = 0; i < size_lefthip; i++){
 		lefthip.createStep(tmp_lefthip);
 		tmp_lefthip++;
 	}
+
 	for(int i = 0; i < size_righthip; i++){
 		righthip.createStep(tmp_righthip);
 		tmp_righthip++;
@@ -70,6 +75,8 @@ int main(){
 	righthip.applyDeltaRule();
 	leftknee.applyDeltaRule();
 	rightknee.applyDeltaRule();
+
+	std::cout << "Time: " << ((double)(clock()-tstart)/CLOCKS_PER_SEC) << std::endl;
 
 	lefthip.toString("lefthip_target-output.csv");
 	righthip.toString("righthip_target-output.csv");
