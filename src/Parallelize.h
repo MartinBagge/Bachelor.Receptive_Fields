@@ -25,10 +25,10 @@ class Parallelize {
 		std::vector<double> createKernels(std::vector<double> centers, double step, double width, int size, int numberOfBlocks);
 		//LEARNING
 		//function for simple supervised learning
-		std::vector<double> applyDeltaRule(float learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations, int numberOfBlocks);
+		std::vector<double> applyDeltaRule(double learningRate, std::vector<double> centers, std::vector<double> target, std::vector<double> weights, std::vector<double> kernels, int learningIterations, int numberOfBlocks);
 	private:
 		//prepare functions
-		void d_createKernels(float *centers, float step, float width, float *kernelsArr, int centerSize, int kernelSize, int numberOfBlocks);
+		void d_createKernels(double *centers, double step, double width, double *kernelsArr, int centerSize, int kernelSize, int numberOfBlocks);
 };
 #endif /* PARALLELIZE_H_ */
 
